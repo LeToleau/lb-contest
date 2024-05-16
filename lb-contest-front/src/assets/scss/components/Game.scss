@@ -1,0 +1,76 @@
+.game {
+    padding: 32px;
+
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+
+    cursor: grab;
+    
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-y: 70%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+
+    opacity: 0;
+    transition: .3s;
+
+    &__parfumes,
+    .score-board,
+    .bottom-bar {
+        opacity: 0;
+        transition-property: opacity;
+        transition-duration: .5s;
+    }
+
+    &__parfumes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        max-width: max-content;
+        max-height: max-content;
+        z-index: 1;
+        user-select: none;
+        transition-delay: .3s;
+
+        display: flex;
+        picture {
+            display: flex;
+            position: relative;
+
+            &:first-child,
+            &:last-child {
+                img {
+                    position: relative;
+                    bottom: 40px;
+                }
+            }
+        }
+    }
+
+    .score-board {
+        transition-delay: .5s;
+    }
+
+    .bottom-bar {
+        position: relative;
+        z-index: 2;
+        transition-delay: .7s;
+
+        @for $i from 1 through 9 {
+            .bottom-bar__item:nth-child(#{$i}) {
+              .bottom-bar__picture {
+                opacity: 0;
+              }
+            }
+        }
+    }
+}

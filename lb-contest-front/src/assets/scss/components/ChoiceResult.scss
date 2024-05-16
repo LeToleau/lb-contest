@@ -1,0 +1,29 @@
+.choice-result {
+    max-width: max-content;
+    max-height: max-content;
+    padding: 6px;
+    border-radius: 5px;
+    color: white;
+    font-family: Augustea;
+    font-size: 12px;
+    font-weight: 800;
+    transform: translate(0px, 40px);
+    opacity: 0;
+    transition: opacity .3s, transform .5s;
+    letter-spacing: 1px;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 300px;
+    left: 0;
+    margin: auto;
+
+    &.right {
+        background-color: rgb(112, 211, 112);
+    }
+
+    &.wrong {
+        background-color: rgb(212, 92, 92);
+    }
+}

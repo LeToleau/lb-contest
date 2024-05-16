@@ -1,0 +1,50 @@
+.main-background {
+    padding: 56px 0 112px;
+    height: 100vh;
+    width: 100vw;
+    
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    opacity: 0;
+    transition: .3s;
+
+
+    &__logo {
+        position: relative;
+        z-index: 2;
+
+        transform: translate(0px, -60px);
+        opacity: 0;
+        transition: opacity .3s .4s, transform .3s .4s;
+    }
+
+    &__parfumes {
+        position: absolute;
+        z-index: 1;
+        bottom: 20px;
+        scale: 0.65;
+        display: flex;
+        gap: 15px;
+
+        picture {
+            &:nth-child(2) {
+                position: relative;
+                top: 40px;
+            }
+        }
+    }
+
+    .button {
+        position: relative;
+        z-index: 2;
+        transform: translate(0px, -60px);
+        opacity: 0;
+        transition: opacity .3s .6s, transform .3s .6s;
+    }
+}

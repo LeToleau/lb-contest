@@ -1,0 +1,32 @@
+.bottom-bar {
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    padding: 6px;
+
+    display: flex;
+    width: 100%;
+
+    &__list {
+        border: 1.5px solid #000000;
+        display: flex;
+        width: 100%;
+        justify-content: space-evenly;
+    }
+
+    &__item {
+        overflow: hidden;
+        cursor: grab;
+    }
+
+    &__picture {
+        width: 125px;
+        height: 125px;
+        background-size: cover;
+        background-position: center;
+        transition: .5s;
+
+        &:hover {
+            scale: 1.5;
+        }
+    }
+}

@@ -1,0 +1,16 @@
+.score-board {
+    background-color: #FFFFFF;
+    padding: 6px;
+    border-radius: 5px;
+
+    span {
+        font-family: Augustea;
+        font-size: 28px;
+        line-height: 40px;
+        padding: 9px 42px;
+        border: 1.5px solid #000000;
+        display: flex;
+        cursor:default;
+        user-select: none;
+    }
+}

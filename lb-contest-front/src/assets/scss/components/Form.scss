@@ -1,0 +1,110 @@
+.form {
+    height: 100vh;
+    width: 100vw;
+    
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Augustea;
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        background-color: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        padding: 12px;
+        border-radius: 5px;
+        transition: all .5s .8s;
+        // max-width: 755px;
+    }
+
+    &__wrapper {
+        border: 1.5px solid #000000;
+        padding: 22px 95px 42px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        h1 {
+            font-size: 64px;
+            font-weight: 500;
+            line-height: 90px;
+            margin-bottom: 24px;
+            max-width: 494px;
+        }
+    }
+
+    &__row {
+        display: flex;
+        gap: 32px;
+        width: 100%;
+        margin-bottom: 16px;
+        
+        input {
+            display: flex;
+            width: 100%;
+            border: none;
+            border-bottom: 1.5px solid #000000;
+            background-color: transparent;
+            font-family: Augustea;
+            padding: 8px 6px;
+            font-size: 16px;
+            line-height: 22px;
+            
+            &:focus-visible {
+                outline: 0;
+            }
+        }
+
+        &.checkbox {
+            gap: 8px;
+            padding-right: 42px;
+
+            input {
+                width: auto;
+            }
+
+            span {
+                font-family: Montserrat, sans-serif;
+                font-size: 12px;
+                line-height: 16px;
+
+                a {
+                    color: #1E8FF8;
+                    text-decoration: none;
+                }
+            }
+        }
+
+        &.submit-button {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center;
+
+            .play-button {
+                padding: 0;
+                box-shadow: none;
+
+                span {
+                    font-size: 32px;
+                    line-height: 44px;
+                    padding: 7px 48px;
+                }
+
+                &:hover {
+                    box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.75);
+                }
+            }
+        }
+    }
+}

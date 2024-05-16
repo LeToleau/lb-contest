@@ -1,0 +1,29 @@
+.play-button {
+    background: #ffffff;
+    border-radius: 5px;
+    padding: 6px;
+    display: flex;
+    cursor: pointer;
+    transition: .5s;
+    text-decoration: none;
+    box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
+    
+    &:hover {
+        scale: 1.03;
+        background: #ebdde1;
+        box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
+        -webkit-box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
+    }
+    
+    span {
+        color: #000000;
+        border: 1.5px solid #000000;
+        font-family: Augustea;
+        font-size: 32px;
+        line-height: 44px;
+        padding: 8px 68px;
+    }
+}
