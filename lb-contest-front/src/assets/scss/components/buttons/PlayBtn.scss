@@ -9,6 +9,10 @@
     box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
     -webkit-box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 5px 8px -1px rgba(0,0,0,0.75);
+
+    @media (max-width: 768px) {
+        padding: 5px;
+    }
     
     &:hover {
         scale: 1.03;
@@ -24,6 +28,11 @@
         font-family: Augustea;
         font-size: 32px;
         line-height: 44px;
-        padding: 8px 68px;
+        padding: 6px 46px;
+
+        @media (max-width: 768px) {
+            font-size: 28px;
+            line-height: 40px;
+        }
     }
 }
