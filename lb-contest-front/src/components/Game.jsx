@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 
 import Bgd from '../assets/img/bgd.png';
-import Bottle1 from '../assets/img/green-bottle.svg'
-import Bottle2 from '../assets/img/yellow-bottle.svg'
-import Bottle3 from '../assets/img/pink-bottle.svg'
+import Bottle1 from '../assets/img/bottle-DF.png';
+import Bottle2 from '../assets/img/bottle-AA.png';
+import Bottle3 from '../assets/img/bottle-UD.png';
 
 import '../assets/scss/components/Game.scss'
 
@@ -15,6 +15,7 @@ function Game() {
   const [score, setScore] = useState(0);
   const [bottles, setBottles] = useState(null);
   const [scoreBoard, setScoreBoard] = useState(null);
+
 
   
   useEffect(() => { 

@@ -20,6 +20,13 @@
     opacity: 0;
     transition: .3s;
 
+    @media (max-width: 768px) {
+        padding: 32px 16px;
+        background-position-y: 25%;
+        background-size: 220%;
+        background-position-x: center;
+    }
+
     &__parfumes,
     .score-board,
     .bottom-bar {
@@ -40,6 +47,7 @@
         z-index: 1;
         user-select: none;
         transition-delay: .3s;
+        padding-top: 8vh;
 
         display: flex;
         picture {
@@ -53,6 +61,24 @@
                     bottom: 40px;
                 }
             }
+        }
+    }
+
+    &__bottle {
+        @media (min-width: 1440px) {
+            //max-height: 60vh;
+            //aspect-ratio: 5/14;
+            height: 80vh;
+        }
+
+        @media (max-width: 1200px) {
+            max-height: 60vh;
+            aspect-ratio: 5/14;
+        }
+
+        @media (max-width: 600px) {
+            max-height: 40vh;
+            aspect-ratio: 10/28;
         }
     }
 
