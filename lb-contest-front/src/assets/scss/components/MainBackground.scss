@@ -13,15 +13,35 @@
 
     opacity: 0;
     transition: .3s;
+    background-position: top center;
+
+    @media (max-width: 768px) {
+        background-image: url('../../img/main-bgd-tablet.png') !important;
+    }
+
+    @media (max-width: 500px) {
+        background-image: url('../../img/main-bgd-mobile.png') !important;
+        padding: 60px 15px;
+        // background-size: 500%;
+        background-position-x: center;
+    }
 
 
     &__logo {
         position: relative;
         z-index: 2;
+        max-width: 157px;
+        max-height: 157px;
 
         transform: translate(0px, -60px);
         opacity: 0;
         transition: opacity .3s .4s, transform .3s .4s;
+
+        img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
     }
 
     &__parfumes {
