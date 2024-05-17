@@ -4,15 +4,17 @@ import Draggable from 'react-draggable';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Img1 from '../assets/img/divinum-ficus.svg';
-import Img2 from '../assets/img/uva-dulcis.svg';
-import Img3 from '../assets/img/morron.svg';
-import Img4 from '../assets/img/ambrosia-aurea.svg';
-import Img5 from '../assets/img/hojas.svg';
-import Img6 from '../assets/img/margarita.svg';
-import Img7 from '../assets/img/miel.svg';
-import Img8 from '../assets/img/lime.svg';
-import Img9 from '../assets/img/pink-fluid.svg';
+import Arrow from '../assets/img/Arrow.png';
+
+import Img1 from '../assets/img/Carciofo.png';
+import Img2 from '../assets/img/Rosa.png';
+import Img3 from '../assets/img/Peperone.png';
+import Img4 from '../assets/img/Nespola.png';
+import Img5 from '../assets/img/Alloro.png';
+import Img6 from '../assets/img/Camomilla.png';
+import Img7 from '../assets/img/Miele.png';
+import Img8 from '../assets/img/Fico.png';
+import Img9 from '../assets/img/Vino.png';
 
 import '../assets/scss/components/BottomBar.scss';
 
@@ -35,6 +37,65 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
 
     // navigation tool
     const history = useNavigate();
+
+    // mobile scroll ingredient bar
+    const ingredientsListRef = useRef(null);
+    const [visibleIngredients, setVisibleIngredients] = useState(
+      Array(9).fill(true)
+    );
+    const [isTranslated, setIsTranslated] = useState([false]);
+  
+    useEffect(() => {
+      // console.log(visibleIngredients)
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const index = entry.target.getAttribute('data-index');
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = "1";
+              setVisibleIngredients((prevState) => {
+                const newState = [...prevState];
+                newState[index] = true;
+                return newState;
+              });
+            } else {
+              entry.target.style.opacity = "0";
+              setVisibleIngredients((prevState) => {
+                const newState = [...prevState];
+                newState[index] = false;
+                return newState;
+              });
+            }
+          });
+        },
+        {
+          root: ingredientsListRef.current,
+          threshold: 0.1,
+        }
+      );
+  
+      const items = document.querySelectorAll('.bottom-bar__item-wrapper');
+      items.forEach((item) => observer.observe(item));
+  
+      return () => observer.disconnect();
+    }, [isTranslated, visibleIngredients]);
+
+    const scrollList = (direction) => {
+      const { current } = ingredientsListRef;
+      if (current) {
+        const scrollAmount = direction * current.offsetWidth / 2;
+        current.style.translate = direction === -1 ? `${scrollAmount}px` : "0px";
+        setIsTranslated(!isTranslated);
+        console.log(isTranslated)
+        /*
+        current.style.overflow = "hidden";
+
+        setTimeout(() => {
+          current.style.overflow = "initial";
+        }, 500);
+        */
+      }
+    };
 
     // object to check scores
     let isScore = {
@@ -110,7 +171,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     }, [allDraggableDisabled, history]);
 
     const onDrop = (e, element) => {
-        element.node.style.cursor = 'grab'
+        element.node.style.cursor = 'grab';
+        element.node.style.zIndex = 999999;
     
         let droppedElementRect = {
           left: element.node.getBoundingClientRect().x,
@@ -277,19 +339,27 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     const onDrag = (e, element) => {
         element.node.style.cursor = 'grabbing';
         element.node.style.transition = 'none';
+        element.node.style.zIndex = 999999;
+        console.log(element);
     }
 
   return (
     <div className="bottom-bar">
-      <ul className="bottom-bar__list">
-        {[Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9].map((img, index) => (
-          <Draggable key={index} /*nodeRef={ref}*/ onStop={onDrop} onStart={onDrag} onDrag={whileDrag} position={position}>
-            <li ref={ref} className="bottom-bar__item" id={`Img${index + 1}`}>
-              <div className="bottom-bar__picture" style={{ backgroundImage: `URL(${img})` }}></div>
-            </li>
-          </Draggable>
-        ))}
-      </ul>
+      <div className="bottom-bar__wrapper">
+        <div className="bottom-bar__arrow left" onClick={() => scrollList(1)}><img src={Arrow} alt="Left Arrow" /></div>
+        <ul className="bottom-bar__list" ref={ingredientsListRef}>
+          {[Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9].map((img, index) => (
+            <div className="bottom-bar__item-wrapper" key={index} data-index={index} /*style={{ opacity: visibleIngredients[index] ? 1 : 0 }}*/>
+              <Draggable onStop={onDrop} onStart={onDrag} onDrag={whileDrag} position={position}>
+                <li ref={ref} className="bottom-bar__item" id={`Img${index + 1}`}>
+                  <div className="bottom-bar__picture" style={{ backgroundImage: `URL(${img})` }}></div>
+                </li>
+              </Draggable>
+            </div>
+          ))}
+        </ul>
+        <div className="bottom-bar__arrow right" onClick={() => scrollList(-1)}><img src={Arrow} alt="Right Arrow" /></div>
+      </div>
     </div>
   );
 }
