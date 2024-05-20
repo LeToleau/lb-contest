@@ -7,6 +7,7 @@ import Form from './components/Form';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
 import './assets/scss/utils/fonts.scss';
+import StartPage from './components/StartPage';
 
 function App() {
   // const [count, setCount] = useState(0);
@@ -15,7 +16,8 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route exact path="/" element={<MainBackground/>} />
+          <Route path="/" element={<StartPage/>} />
+          <Route exact path="/play" element={<MainBackground/>} />
           <Route path="/game" element={<Game/>} />
           <Route path="/win-page" element={<WinPage/>} />
           <Route path="/quasi" element={<Quasi/>} />
