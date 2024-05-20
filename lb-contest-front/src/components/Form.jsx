@@ -1,7 +1,7 @@
-import Bgd from '../assets/img/main-bgd.png'
+import Bgd from '../assets/img/main-bgd.png';
 import PlayBtn from './buttons/Button';
 import { /*useEffect,*/ useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import '../assets/scss/components/Form.scss';
 
@@ -15,6 +15,8 @@ function Form() {
     termsConditions: false,
   });
 
+  const navigate = useNavigate()
+  
   function handleSubmit(e) {
     /*
       Previene el comportamiento default de los
@@ -32,6 +34,10 @@ function Form() {
       address: '',
       termsConditions: isChecked,
     });
+
+    setTimeout(() => {
+      navigate('/win-page')
+    }, 200);
   }
 
   function handleCheckbox() {
@@ -56,7 +62,6 @@ function Form() {
   const estiloDelDiv = {
       backgroundImage: `url(${Bgd})`,
   };
-  // const navigate = useNavigate()
 
   /*
   useEffect(() => {
