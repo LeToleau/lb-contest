@@ -29,6 +29,7 @@
         font-size: 32px;
         line-height: 44px;
         padding: 6px 46px;
+        user-select: none;
 
         @media (max-width: 768px) {
             font-size: 28px;
