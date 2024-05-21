@@ -69,5 +69,10 @@
         transform: translate(0px, -60px);
         opacity: 0;
         transition: opacity .3s .6s, transform .3s .6s;
+
+        .play-button {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
     }
 }
