@@ -44,6 +44,13 @@
         background-position-y: 50%;
         gap: 16vh;
     }
+    
+
+    @media (max-height: 768px) {
+        min-height: 100vh;
+        height: auto;
+    }
+
 
     &__main {
         background-color: rgba(255, 255, 255, 0.7);
@@ -88,6 +95,10 @@
             margin-bottom: 4vh;
         }
 
+        @media (min-width: 769px) and (max-height: 735px) {
+            margin-bottom: 3vh;
+        }
+
         img {
             object-fit: cover;
             height: 100%;
@@ -103,6 +114,14 @@
             grid-template-columns: 1fr;
             gap: 0;
             display: block;
+        }
+
+        @media (min-width: 769px) and (max-height: 735px) {
+            margin-bottom: 4vh;
+        }
+
+        @media (min-width: 769px) and (max-height: 600px) {
+            margin-bottom: 3vh;
         }
 
 
@@ -138,6 +157,10 @@
             @media (max-width: 768px) {
                 background-color: transparent;
                 max-width: 344px;
+            }
+
+            @media (min-width: 769px) and (max-height: 735px) {
+                max-width: 35vh;
             }
 
             &:first-of-type {                
@@ -251,6 +274,11 @@
     }
 
     .button {
+        .play-button {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
         position: relative;
         z-index: 2;
         transform: translate(0px, -60px);
