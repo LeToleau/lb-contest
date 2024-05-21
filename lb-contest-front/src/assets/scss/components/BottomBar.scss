@@ -40,6 +40,10 @@
             width: calc(100% - 44px);
         }
 
+        @media (max-width: 600px) {
+            gap: 12px;
+        }
+
         @media (max-width: 350px) {
             gap: 5px;
         }
@@ -47,6 +51,10 @@
 
     &__item-wrapper {
         cursor: grab;
+        &.hide {
+            opacity: 0;
+            transition: .3s;
+        }
     
         @media (max-width: 768px) {
             min-width: 14vw;
