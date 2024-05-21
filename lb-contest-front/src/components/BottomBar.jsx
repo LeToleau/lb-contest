@@ -16,6 +16,13 @@ import Img7 from '../assets/img/Miele.png';
 import Img8 from '../assets/img/Fico.png';
 import Img9 from '../assets/img/Vino.png';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+// import required modules
+import { Navigation } from 'swiper/modules';
+
 import '../assets/scss/components/BottomBar.scss';
 
 function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
@@ -38,13 +45,23 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     // navigation tool
     const history = useNavigate();
 
+    const [slides, setSlides] = useState({
+      slidesPerView: 9,
+      initialSlide: 0,
+      spaceBetween: 30,
+      pagination: true
+    })
+
     // mobile scroll ingredient bar
+    /*
     const ingredientsListRef = useRef(null);
     const [visibleIngredients, setVisibleIngredients] = useState(
       Array(9).fill(true)
     );
     const [isTranslated, setIsTranslated] = useState([false]);
+    */
   
+   /*
     useEffect(() => {
       // console.log(visibleIngredients)
       const observer = new IntersectionObserver(
@@ -93,9 +110,9 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
         setTimeout(() => {
           current.style.overflow = "initial";
         }, 500);
-        */
       }
     };
+    */
 
     // object to check scores
     let isScore = {
@@ -346,19 +363,23 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
   return (
     <div className="bottom-bar">
       <div className="bottom-bar__wrapper">
-        <div className="bottom-bar__arrow left" onClick={() => scrollList(1)}><img src={Arrow} alt="Left Arrow" /></div>
-        <ul className="bottom-bar__list" ref={ingredientsListRef}>
-          {[Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9].map((img, index) => (
-            <div className="bottom-bar__item-wrapper" key={index} data-index={index} /*style={{ opacity: visibleIngredients[index] ? 1 : 0 }}*/>
-              <Draggable onStop={onDrop} onStart={onDrag} onDrag={whileDrag} position={position}>
-                <li ref={ref} className="bottom-bar__item" id={`Img${index + 1}`}>
-                  <div className="bottom-bar__picture" style={{ backgroundImage: `URL(${img})` }}></div>
-                </li>
-              </Draggable>
-            </div>
+        {/* <div className="bottom-bar__arrow left" onClick={() => scrollList(1)}><img src={Arrow} alt="Left Arrow" /></div> */}
+        <ul className="bottom-bar__list" /*ref={ingredientsListRef}*/>
+          <Swiper className="mySwiper" spaceBetween={slides.spaceBetween} navigation={true} modules={[Navigation]}>
+            {[Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9].map((img, index) => (
+              <SwiperSlide key={index}>
+              <div className="bottom-bar__item-wrapper" /*key={index}*/ data-index={index} /*style={{ opacity: visibleIngredients[index] ? 1 : 0 }}*/>
+                <Draggable onStop={onDrop} onStart={onDrag} onDrag={whileDrag} position={position}>
+                  <li ref={ref} className="bottom-bar__item" id={`Img${index + 1}`}>
+                    <div className="bottom-bar__picture" style={{ backgroundImage: `URL(${img})` }}></div>
+                  </li>
+                </Draggable>
+              </div>
+              </SwiperSlide>
           ))}
+          </Swiper>
         </ul>
-        <div className="bottom-bar__arrow right" onClick={() => scrollList(-1)}><img src={Arrow} alt="Right Arrow" /></div>
+        {/* <div className="bottom-bar__arrow right" onClick={() => scrollList(-1)}><img src={Arrow} alt="Right Arrow" /></div> */}
       </div>
     </div>
   );
