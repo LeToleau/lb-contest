@@ -50,13 +50,18 @@ function Form() {
 
 
   function handleChange(e) {
-
-    const { name, value, checked, type } = e.target;
+    // const { name, value, checked, type } = e.target;
 
     //const newValue = type === 'checkbox' ? checked : value;
     
     // Sincroniza el estado de nuevo
-    setFormData(formData);
+    console.log(e.target.value)
+    setFormData(
+      {
+        ...formData,
+        [e.target.name]: e.target.value
+      }
+    );
   }
 
   const estiloDelDiv = {
@@ -135,7 +140,7 @@ function Form() {
               id="terms-conditions"
               name="terms-conditions"
               type="checkbox"
-              // checked={isChecked}
+              checked={isChecked}
               onChange={handleCheckbox}
             />
             <span>Iscrivendomi, accetto i <a href="">Termini di Servizio</a> e l&rsquo;<a href="">Informativa sulla Privacy</a> di Laura Biagiotti.</span>

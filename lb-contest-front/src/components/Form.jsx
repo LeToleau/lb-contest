@@ -22,7 +22,7 @@ function Form() {
       Previene el comportamiento default de los
       formularios el cual recarga el sitio
     */
-   e.preventDefault();
+    e.preventDefault();
 
     // Aquí puedes enviar los datos al backend
     console.log(formData);
@@ -49,14 +49,14 @@ function Form() {
   }
 
 
-  function handleChange(e) {
-
-    const { name, value, checked, type } = e.target;
-
-    //const newValue = type === 'checkbox' ? checked : value;
-    
+  function handleChange(e) {    
     // Sincroniza el estado de nuevo
-    setFormData(formData);
+    setFormData(
+      {
+        ...formData,
+        [e.target.name]: e.target.value
+      }
+    );
   }
 
   const estiloDelDiv = {
@@ -136,7 +136,7 @@ function Form() {
               name="terms-conditions"
               type="checkbox"
               // checked={isChecked}
-              onChange={handleCheckbox}
+              // onChange={handleCheckbox}
             />
             <span>Iscrivendomi, accetto i <a href="">Termini di Servizio</a> e l&rsquo;<a href="">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
           </div>
