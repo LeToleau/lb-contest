@@ -162,7 +162,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
 
             setTimeout(() => {
               if (score >= 6) {
-                history('/form');
+                history('/contest-form');
               } else {
                 history('/form');
               }
