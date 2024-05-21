@@ -4,6 +4,7 @@
 
     background-repeat: no-repeat;
     background-size: cover;
+    background-position-x: center;
     
     display: flex;
     flex-direction: column;
@@ -15,6 +16,24 @@
 
     font-family: Augustea;
 
+    @media (max-width: 992px) {
+        background-image: url('../../img/main-bgd-tablet.png') !important;
+    }
+
+    @media (max-width: 767px) {
+        padding: 0 35px;
+        background-image: url('../../img/main-bgd-mobile.png') !important;
+    }
+
+    &__overlay {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 40%);
+        backdrop-filter: blur(4px);
+    }
+
     &__card {
         background-color: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(10px);
@@ -23,28 +42,60 @@
         opacity: 0;
         transition: all .5s .8s;
         max-width: 755px;
+        z-index: 2;
     }
 
     &__text-wrapper {
         border: 1.5px solid #000000;
-        padding: 27px;
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        padding: 10px 30px 38px;
+
+        @media (max-width: 1080px) {
+            padding: 18px 10px 45px;
+        }
+
+        @media (max-width: 767px) {
+            gap: 22px;
+        }
 
         h1 {
             font-size: 96px;
             font-weight: 500;
             line-height: 134px;
+
+            @media (max-width: 1080px) {
+                font-size: 64px;
+                line-height: 90px;
+            }
+
+            @media (max-width: 767px) {
+                font-size: 40px;
+                line-height: 56px;
+            }
         }
 
         h2 {
-            font-size: 40px;
+            font-size: 32px;
             font-weight: 500;
             line-height: 48px;
-            margin-bottom: 45px;
+            margin-bottom: 30px;
+            max-width: 618px;
+
+            @media (max-width: 1080px) {
+                font-size: 28px;
+                line-height: 48px;
+            }
+
+            @media (max-width: 767px) {
+                font-size: 19px;
+                line-height: 32px;
+                max-width: 286px;
+                margin-bottom: 0;
+            }
         }
 
         .button {
@@ -54,6 +105,20 @@
 
             .play-button {
                 padding: 0;
+                background-color: transparent;
+
+                span {
+                    @media (max-width: 1080px) {
+                        font-size: 28px;
+                        line-height: 40px;
+                    }
+
+                    @media (max-width: 767px) {
+                        padding: 8px 18px;
+                        font-size: 20px;
+                        line-height: 28px;
+                    }
+                }
             }
         }
     }

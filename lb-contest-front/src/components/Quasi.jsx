@@ -1,4 +1,4 @@
-import Bgd from '../assets/img/quasi-bgd.png'
+import Bgd from '../assets/img/main-bgd.png'
 import PlayBtn from './buttons/Button';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -33,12 +33,13 @@ function Quasi() {
 
   return (
     <div className="quasi" style={estiloDelDiv}>
+      <div className="quasi__overlay"></div>
       <div className="quasi__card">
-        <div className="win-page__text-wrapper">
+        <div className="quasi__text-wrapper">
           <h1>C&rsquo;ERI QUASI!</h1>
-          <h2>partecipa all&rsquo;estrazione finale per un weekend a roma</h2>
+          <h2>lorem ipsum dolor sit amet, consectatur adipiscing elit</h2>
           <div className="button">
-            <PlayBtn text={'Partecipa'} onClick={handlePlayClick} />
+            <PlayBtn text={'Torna Indietro'} onClick={handlePlayClick} />
           </div>
         </div>
       </div>
