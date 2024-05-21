@@ -41,62 +41,70 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     // mobile scroll ingredient bar
     const ingredientsListRef = useRef(null);
     const [visibleIngredients, setVisibleIngredients] = useState(
-      Array(9).fill(true)
+      Array(9).fill(false)
     );
-    const [isTranslated, setIsTranslated] = useState([false]);
-  
-    useEffect(() => {
-      // console.log(visibleIngredients)
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const index = entry.target.getAttribute('data-index');
-            if (entry.isIntersecting) {
-              entry.target.style.opacity = "1";
-              setVisibleIngredients((prevState) => {
-                const newState = [...prevState];
-                newState[index] = true;
-                return newState;
-              });
-            } else {
-              entry.target.style.opacity = "0";
-              setVisibleIngredients((prevState) => {
-                const newState = [...prevState];
-                newState[index] = false;
-                return newState;
-              });
-            }
-          });
-        },
-        {
-          root: ingredientsListRef.current,
-          threshold: 0.1,
-        }
-      );
-  
-      const items = document.querySelectorAll('.bottom-bar__item-wrapper');
-      items.forEach((item) => observer.observe(item));
-  
-      return () => observer.disconnect();
-    }, [isTranslated, visibleIngredients]);
+    
+    function hideItems() {
+      const slides = document.querySelectorAll('.bottom-bar__item-wrapper');
 
+      slides.forEach((slide, index) => {
+        if (visibleIngredients[index]) {
+          slide.classList.add('hide');
+        } else {
+          slide.classList.remove('hide');
+        }
+      });
+    }
+    
     const scrollList = (direction) => {
       const { current } = ingredientsListRef;
       if (current) {
         const scrollAmount = direction * current.offsetWidth / 2;
         current.style.translate = direction === -1 ? `${scrollAmount}px` : "0px";
-        setIsTranslated(!isTranslated);
-        console.log(isTranslated)
-        /*
-        current.style.overflow = "hidden";
 
-        setTimeout(() => {
-          current.style.overflow = "initial";
-        }, 500);
-        */
+        let bounds = {
+          start1: 0,
+          end1: 0,
+          start2: 0,
+          end2: 0,
+        }
+
+        if (window.innerWidth <= 500) {
+          bounds.start1 = 5;
+          bounds.end1 = 9;
+          bounds.start2 = 0;
+          bounds.end2 = 2;
+        } else if (window.innerWidth <= 768) {
+          bounds.start1 = 6;
+          bounds.end1 = 9;
+          bounds.start2 = 0;
+          bounds.end2 = 3;
+        }
+
+        if (direction === -1) {
+          setVisibleIngredients(
+            visibleIngredients.fill(false, bounds.start1, bounds.end1)
+          )
+
+          setVisibleIngredients(
+            visibleIngredients.fill(true, bounds.start2, bounds.end2)
+          )
+
+          hideItems();
+        } else {
+          setVisibleIngredients(
+            visibleIngredients.fill(false, bounds.start2, bounds.end2)
+          )
+
+          setVisibleIngredients(
+            visibleIngredients.fill(true, bounds.start1, bounds.end1)
+          )
+
+          hideItems();
+        }
       }
     };
-
+    
     // object to check scores
     let isScore = {
       Img1: false,
@@ -112,14 +120,27 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
 
     // 
     useEffect(() => {
-        const ingredientes = document.querySelectorAll('.bottom-bar__picture');
+      const ingredientes = document.querySelectorAll('.bottom-bar__picture');
         setIngredients(ingredientes);
         const background = document.querySelector('.game');
         setBackground(background);
-    }, []);
+        
+        if (window.innerWidth <= 500) {
+          setVisibleIngredients(
+            visibleIngredients.fill(true, 5, 9)
+          )
+        } else if (window.innerWidth <= 768) {
+          setVisibleIngredients(
+            visibleIngredients.fill(true, 6, 9)
+          )
+        }
+        
+        hideItems();
 
-    // check items use
-    useEffect(() => {
+      }, []);
+      
+      // check items use
+      useEffect(() => {
         checkAllDraggableDisabled(disableds);
     }, [disableds]);
 
@@ -153,6 +174,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
                 bottle.style.transition = `.5s .5s`;
                 bottle.style.opacity = 0;
             })
+
             document.querySelector('.bottom-bar').style.transition = `.3s .3s`;
             document.querySelector('.bottom-bar').style.opacity = 0;
             scoreBoard.style.transition = `.3s .6s`;
@@ -349,7 +371,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
         <div className="bottom-bar__arrow left" onClick={() => scrollList(1)}><img src={Arrow} alt="Left Arrow" /></div>
         <ul className="bottom-bar__list" ref={ingredientsListRef}>
           {[Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9].map((img, index) => (
-            <div className="bottom-bar__item-wrapper" key={index} data-index={index} /*style={{ opacity: visibleIngredients[index] ? 1 : 0 }}*/>
+            <div className={`bottom-bar__item-wrapper`} key={index} data-index={index} /*style={{ opacity: visibleIngredients[index] ? 1 : 0 }}*/>
               <Draggable onStop={onDrop} onStart={onDrag} onDrag={whileDrag} position={position}>
                 <li ref={ref} className="bottom-bar__item" id={`Img${index + 1}`}>
                   <div className="bottom-bar__picture" style={{ backgroundImage: `URL(${img})` }}></div>
