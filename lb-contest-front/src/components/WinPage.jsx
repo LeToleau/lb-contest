@@ -32,7 +32,7 @@ function WinPage() {
         setVersion({
           cssClass: "version-1",
           bgd: Bgd,
-          text: "Hai Vinto una body lotion di Aqve Romane",
+          text: "Hai vinto uno dei profumi di Aqve Romane",
           img: Geles,
         });
         break;
@@ -40,7 +40,7 @@ function WinPage() {
         setVersion({
           cssClass: "version-1",
           bgd: Bgd,
-          text: "Hai vinto uno dei profumi di Aqve Romane",
+          text: "Hai Vinto una body lotion di Aqve Romane",
           img: Perfumes,
         });
         break;
