@@ -175,7 +175,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
         }
 
         hideItems();
-        scrollList(1, false);
+        scrollList(-1, false);
       })
       
       hideItems();
