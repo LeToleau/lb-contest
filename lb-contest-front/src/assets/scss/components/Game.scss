@@ -75,10 +75,9 @@
 
             &:first-child,
             &:last-child {
-                img {
-                    position: relative;
-                    bottom: 40px;
-                }
+
+                bottom: 40px;
+
             }
         }
     }
@@ -96,7 +95,7 @@
         }
 
         @media (max-width: 600px) {
-            max-height: 30vh;
+            max-height: 40vh;
             aspect-ratio: 10/28;
         }
 
