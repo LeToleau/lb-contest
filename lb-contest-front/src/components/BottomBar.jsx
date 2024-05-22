@@ -56,11 +56,24 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
       });
     }
     
-    const scrollList = (direction) => {
+    const scrollList = (direction, resize) => {
       const { current } = ingredientsListRef;
       if (current) {
-        const scrollAmount = direction * current.offsetWidth / 2;
-        current.style.translate = direction === -1 ? `${scrollAmount}px` : "0px";
+
+        if (!resize) {
+          let scrollAmount;
+          const elemWidth = document.querySelector('.bottom-bar__item-wrapper').getBoundingClientRect().width;
+  
+          if (window.innerWidth <= 500) {
+            scrollAmount = (-elemWidth * 4) - 45;
+          } else if (window.innerWidth <= 680) {
+            scrollAmount = (-elemWidth * 3) - 45;
+          } else if (window.innerWidth <= 768) {
+            scrollAmount = (-elemWidth * 3) - 10;
+          }
+  
+          current.style.translate = direction === -1 ? `${scrollAmount}px` : "0px";
+        }
 
         let bounds = {
           start1: 0,
@@ -73,7 +86,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
           bounds.start1 = 5;
           bounds.end1 = 9;
           bounds.start2 = 0;
-          bounds.end2 = 2;
+          bounds.end2 = 4;
         } else if (window.innerWidth <= 768) {
           bounds.start1 = 6;
           bounds.end1 = 9;
@@ -121,23 +134,52 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     // 
     useEffect(() => {
       const ingredientes = document.querySelectorAll('.bottom-bar__picture');
-        setIngredients(ingredientes);
-        const background = document.querySelector('.game');
-        setBackground(background);
-        
-        if (window.innerWidth <= 500) {
+      setIngredients(ingredientes);
+      const background = document.querySelector('.game');
+      setBackground(background);
+      
+      if (window.innerWidth <= 500) {
+        setVisibleIngredients(
+          visibleIngredients.fill(true, 5, 9)
+        )
+      } else if (window.innerWidth <= 768) {
+        setVisibleIngredients(
+          visibleIngredients.fill(true, 6, 9)
+        )
+      }
+
+      window.addEventListener('resize', (e) => {
+        const vw = e.target.outerWidth;
+
+        if (vw <= 500) {
+          setVisibleIngredients(
+            visibleIngredients.fill(false, 0, 4)
+          )
+
           setVisibleIngredients(
             visibleIngredients.fill(true, 5, 9)
           )
-        } else if (window.innerWidth <= 768) {
+        } else if (vw <= 768) {
+          setVisibleIngredients(
+            visibleIngredients.fill(false, 0, 6)
+          )
+
           setVisibleIngredients(
             visibleIngredients.fill(true, 6, 9)
           )
+        } else if (vw == 768 || vw > 768) {
+          console.log(true)
+          setVisibleIngredients(
+            visibleIngredients.fill(false, 0, 9)
+          )
         }
-        
-        hideItems();
 
-      }, []);
+        hideItems();
+        scrollList(1, false);
+      })
+      
+      hideItems();
+    }, []);
       
       // check items use
       useEffect(() => {
@@ -204,7 +246,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
         bottles.forEach((bottle) => {
           const bottleRect = bottle.getBoundingClientRect();
           const id = bottle.getAttribute('id');
-          console.log(bottleRect.bottom + 40)
+          // console.log(bottleRect.bottom + 40)
           if (
             droppedElementRect.left >= bottleRect.left &&
             droppedElementRect.top >= bottleRect.top &&
@@ -362,7 +404,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
         element.node.style.cursor = 'grabbing';
         element.node.style.transition = 'none';
         element.node.style.zIndex = 999999;
-        console.log(element);
+        // console.log(element);
     }
 
   return (
