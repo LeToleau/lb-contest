@@ -38,7 +38,7 @@
         margin: 0 auto;
         
         @media (max-width: 768px) {
-            justify-content: unset;
+            justify-content: flex-start;
             gap: 10px;
             width: calc(100% - 44px);
             gap: .6vw;
