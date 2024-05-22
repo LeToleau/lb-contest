@@ -30,7 +30,7 @@
 
     &__list {
         display: flex;
-        // justify-content: space-evenly;
+        justify-content: space-evenly;
         width: 100%;
         list-style-type: none;
         position: relative;
@@ -38,6 +38,7 @@
         margin: 0 auto;
         
         @media (max-width: 768px) {
+            justify-content: unset;
             gap: 10px;
             width: calc(100% - 44px);
             gap: .6vw;
