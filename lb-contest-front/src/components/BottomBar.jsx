@@ -240,7 +240,9 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     
         let droppedElementRect = {
           left: element.node.getBoundingClientRect().x,
-          top: element.node.getBoundingClientRect().y
+          top: element.node.getBoundingClientRect().y,
+          width: element.node.getBoundingClientRect().width,
+          height: element.node.getBoundingClientRect().height
         };
     
         bottles.forEach((bottle) => {
@@ -248,10 +250,10 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
           const id = bottle.getAttribute('id');
           // console.log(bottleRect.bottom + 40)
           if (
-            droppedElementRect.left >= bottleRect.left &&
-            droppedElementRect.top >= bottleRect.top &&
-            droppedElementRect.left <= bottleRect.right &&
-            droppedElementRect.top <= bottleRect.bottom - 200
+            (droppedElementRect.left + (droppedElementRect.width / 2)) >= bottleRect.left &&
+            (droppedElementRect.top + (droppedElementRect.height / 2)) >= bottleRect.top &&
+            (droppedElementRect.left + (droppedElementRect.width / 2)) <= bottleRect.right &&
+            (droppedElementRect.top + (droppedElementRect.height / 2)) <= bottleRect.bottom
           ) {
             switch (element.node.id) {
               case 'Img1':
