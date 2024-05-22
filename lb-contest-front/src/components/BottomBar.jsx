@@ -382,14 +382,19 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
           const bottleRect = bottle.getBoundingClientRect();
           let droppedElementRect = {
             left: element.node.getBoundingClientRect().x,
-            top: element.node.getBoundingClientRect().y
+            top: element.node.getBoundingClientRect().y,
+            width: element.node.getBoundingClientRect().width,
+            height: element.node.getBoundingClientRect().height
           };
+          console.log(bottleRect)
+
+          let offset = window.innerWidth > 600 ? 200 : 0;
   
           if (
-            droppedElementRect.left >= bottleRect.left &&
-            droppedElementRect.top >= bottleRect.top &&
-            droppedElementRect.left <= bottleRect.right &&
-            droppedElementRect.top <= bottleRect.bottom -200
+            (droppedElementRect.left + (droppedElementRect.width / 2)) >= bottleRect.left &&
+            (droppedElementRect.top + (droppedElementRect.height / 2)) >= bottleRect.top &&
+            (droppedElementRect.left + (droppedElementRect.width / 2)) <= bottleRect.right &&
+            (droppedElementRect.top + (droppedElementRect.height / 2)) <= bottleRect.bottom //- offset
           ) {
             bottle.style.transition = `.2s`;
             bottle.style.filter = `drop-shadow(0px 0px 6px grey)`;
