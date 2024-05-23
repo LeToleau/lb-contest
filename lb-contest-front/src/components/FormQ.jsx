@@ -11,6 +11,11 @@ function Form() {
     name: '',
     lastname: '',
     email: '',
+    phone: '',
+    taxCode: '',
+    city: '',
+    postCode: '',
+    province: '',
     address: '',
     termsConditions: false,
   });
@@ -31,6 +36,11 @@ function Form() {
       name: '',
       lastname: '',
       email: '',
+      phone: '',
+      taxCode: '',
+      city: '',
+      postCode: '',
+      province: '',
       address: '',
       termsConditions: isChecked,
     });
@@ -96,7 +106,7 @@ function Form() {
     <div className="form" style={estiloDelDiv}>
       <form className="form__form" onSubmit={handleSubmit}>
         <div className="form__wrapper">
-          <h1>Restiamo in contatto</h1>
+          <h1>Inserisci i tuoi dati e scopri se sei il vincitore</h1>
           <div className="form__row">
             <input
               id="name"
@@ -117,11 +127,57 @@ function Form() {
           </div>
           <div className="form__row">
             <input
+              id="phone"
+              name="phone"
+              type="text"
+              placeholder="Telefono"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+            <input
               id="email"
               name="email"
               type="email"
               placeholder="Email"
               value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form__row">
+            <input
+              id="tax-code"
+              name="taxCode"
+              type="text"
+              placeholder="Codice Fiscale"
+              value={formData.taxCode}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form__row">
+            <div className="form__row--newline">
+              <input
+                id="city"
+                name="city"
+                type="text"
+                placeholder="Cittá"
+                value={formData.city}
+                onChange={handleChange}
+              />
+              <input
+                id="post-code"
+                name="postCode"
+                type="text"
+                placeholder="CAP"
+                value={formData.postCode}
+                onChange={handleChange}
+              />
+            </div>
+            <input
+              id="province"
+              name="province"
+              type="text"
+              placeholder="Provincia"
+              value={formData.province}
               onChange={handleChange}
             />
           </div>

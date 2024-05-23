@@ -85,7 +85,7 @@ function StartPage() {
                 )}
               </Swiper>
             </div>
-            <div className="start-page__text">{'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pellentesque gravida leo, fringilla varius velit ornare id. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam lacinia mauris nec metus porttitor sagittis.'}</div>
+            <div className="start-page__text">{'Abbina almeno due ingredienti per ogni fragranza e prova a vincere fantastici premi come Eau de Toilette o una body lotion Aqve Romane e un fantastico weekend alle terme di Roma. Ad maiora!'}</div>
         </div>
         </div>
       <div className="button">

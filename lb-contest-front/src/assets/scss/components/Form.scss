@@ -60,7 +60,7 @@
         align-items: center;
         justify-content: center;
 
-        @media (max-width: 992px) {
+        @media (max-width: 1080px) {
             padding: 32px 30px 32px;
         }
 
@@ -69,20 +69,26 @@
         }
 
         h1 {
-            font-size: 64px;
+            font-size: 32px;
             font-weight: 500;
-            line-height: 90px;
+            line-height: 45px;
             margin-bottom: 24px;
-            max-width: 494px;
+            max-width: 543px;
 
-            @media (max-width: 767px) {
-                font-size: 40px;
-                line-height: 56px;
+            @media (max-width: 1024px) {
+                font-size: 28px;
+                line-height: 40px;
             }
 
-            @media (min-width: 769px) and (max-height: 735px) {
+            /*@media (min-width: 769px) and (max-height: 735px) {
                 font-size: 52px;
                 line-height: 74px;
+            }
+            */
+
+            @media (max-width: 767px) {
+                font-size: 20px;
+                line-height: 28px;
             }
         }
     }
@@ -96,20 +102,41 @@
         @media (max-width: 768px) {
             gap: 18px;
         }
-
+        
         @media (max-width: 500px) {
             gap: 21px;
         }
-
+        
         &:first-of-type {
             input {
                 @media (max-width: 768px) {
                     max-width: 238px;
                 }
-
+                
                 @media (max-width: 500px) {
                     max-width: 144px;
                 }
+            }
+        }
+
+        &:has(.form__row--newline) {
+            @media (max-width: 767px) {
+                flex-direction: column;
+            }
+        }
+        
+        &--newline {
+            display: flex;
+            gap: 32px;
+            width: 100%;
+            @media (max-width: 767px) {
+                gap: 20px;
+            }
+        }
+
+        input#province {
+            @media (min-width: 768px) {
+                width: 44%;
             }
         }
         

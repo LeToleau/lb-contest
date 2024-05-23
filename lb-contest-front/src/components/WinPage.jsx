@@ -16,6 +16,7 @@ function WinPage() {
     cssClass: "",
     bgd: "",
     text: "",
+    text2: "",
     img: "",
     btnLink: ""
   });
@@ -33,6 +34,7 @@ function WinPage() {
           cssClass: "version-1",
           bgd: Bgd,
           text: "Hai vinto uno dei profumi di Aqve Romane",
+          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
           img: Geles,
         });
         break;
@@ -41,6 +43,7 @@ function WinPage() {
           cssClass: "version-1",
           bgd: Bgd,
           text: "Hai Vinto una body lotion di Aqve Romane",
+          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
           img: Perfumes,
         });
         break;
@@ -49,6 +52,7 @@ function WinPage() {
           cssClass: "version-2",
           bgd: Bgd2,
           text: "Hai vinto un weekend tra le acque termali di Roma",
+          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
         });
         break;
     }
@@ -82,10 +86,11 @@ function WinPage() {
           <picture className="win-page__img">
             <img src={version.img} alt="Prize Image" />
           </picture>
-          <div className="button">
-            <PlayBtn text={'Ottenere Regalo'} onClick={handlePlayClick} />
-          </div>
+          <p>{version.text2}</p>
         </div>
+      </div>
+      <div className="button">
+        <PlayBtn text={'Ottenere Regalo'} onClick={handlePlayClick} />
       </div>
     </div>
   );
