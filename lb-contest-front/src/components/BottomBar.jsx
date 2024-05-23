@@ -16,6 +16,9 @@ import Img7 from '../assets/img/Miele.png';
 import Img8 from '../assets/img/Fico.png';
 import Img9 from '../assets/img/Vino.png';
 
+import Tick from '../assets/img/tick.svg';
+import Cross from '../assets/img/cross.svg';
+
 import '../assets/scss/components/BottomBar.scss';
 
 function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
@@ -243,6 +246,10 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     const onDrop = (e, element) => {
         element.node.style.cursor = 'grab';
         element.node.style.zIndex = 999999;
+
+        const elementWrapper = element.node.parentNode;
+        const tick = elementWrapper.querySelector('.tick');
+        const cross = elementWrapper.querySelector('.cross')
     
         let droppedElementRect = {
           left: element.node.getBoundingClientRect().x,
@@ -299,6 +306,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
                   bottle.querySelector('.right').style.opacity = 1;
                   bottle.querySelector('.right').style.transform = 'translate(0px, 0px)';
 
+                  tick.style.opacity = "1";
+
                   setTimeout(() => {
                     bottle.querySelector('.right').style.transition = 'opacity .3s, transform .1s .3s';
                     bottle.querySelector('.right').style.opacity = 0;
@@ -308,6 +317,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
                   bottle.querySelector('.wrong').style.transition = 'opacity .3s, transform .5s';
                   bottle.querySelector('.wrong').style.opacity = 1;
                   bottle.querySelector('.wrong').style.transform = 'translate(0px, 0px)';
+
+                  cross.style.opacity = "1";
 
                   setTimeout(() => {
                     bottle.querySelector('.wrong').style.transition = 'opacity .3s, transform .1s .3s';
@@ -324,6 +335,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
                   bottle.querySelector('.right').style.opacity = 1;
                   bottle.querySelector('.right').style.transform = 'translate(0px, 0px)';
 
+                  tick.style.opacity = "1";
+
                   setTimeout(() => {
                     bottle.querySelector('.right').style.transition = 'opacity .3s, transform .1s .3s';
                     bottle.querySelector('.right').style.opacity = 0;
@@ -333,6 +346,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
                   bottle.querySelector('.wrong').style.transition = 'opacity .3s, transform .5s';
                   bottle.querySelector('.wrong').style.opacity = 1;
                   bottle.querySelector('.wrong').style.transform = 'translate(0px, 0px)';
+
+                  cross.style.opacity = "1";
 
                   setTimeout(() => {
                     bottle.querySelector('.wrong').style.transition = 'opacity .3s, transform .1s .3s';
@@ -349,6 +364,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
                   bottle.querySelector('.right').style.opacity = 1;
                   bottle.querySelector('.right').style.transform = 'translate(0px, 0px)';
 
+                  tick.style.opacity = "1";
+
                   setTimeout(() => {
                     bottle.querySelector('.right').style.transition = 'opacity .3s, transform .1s .3s';
                     bottle.querySelector('.right').style.opacity = 0;
@@ -358,6 +375,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
                   bottle.querySelector('.wrong').style.transition = 'opacity .3s, transform .5s';
                   bottle.querySelector('.wrong').style.opacity = 1;
                   bottle.querySelector('.wrong').style.transform = 'translate(0px, 0px)';
+
+                  cross.style.opacity = "1";
 
                   setTimeout(() => {
                     bottle.querySelector('.wrong').style.transition = 'opacity .3s, transform .1s .3s';
@@ -423,6 +442,12 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
         <ul className="bottom-bar__list" ref={ingredientsListRef}>
           {[Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9].map((img, index) => (
             <div className={`bottom-bar__item-wrapper`} key={index} data-index={index} /*style={{ opacity: visibleIngredients[index] ? 1 : 0 }}*/>
+              <picture className="bottom-bar__icon tick">
+                <img src={Tick} alt="Tick" />
+              </picture>
+              <picture className="bottom-bar__icon cross">
+                <img src={Cross} alt="Cross" />
+              </picture>
               <Draggable onStop={onDrop} onStart={onDrag} onDrag={whileDrag} position={position}>
                 <li ref={ref} className="bottom-bar__item" id={`Img${index + 1}`}>
                   <div className="bottom-bar__picture" style={{ backgroundImage: `URL(${img})` }}></div>
