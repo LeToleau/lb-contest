@@ -12,7 +12,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 // import required modules
-import { Pagination } from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules';
 
 import '../assets/scss/components/StartPage.scss';
 
@@ -73,13 +73,8 @@ function StartPage() {
                 <img src={Logo} alt="Laura Biaggioti Logo" />
             </picture>
             <div className="start-page__grid">
-              <Swiper className="mySwiper" spaceBetween={slides.spaceBetween} pagination={true} modules={[Pagination]}>
-                
-                {/* <swiper-container
-                  space-between={slides.spaceBetween} 
-                  slides-per-view={slides.slidesPerView} 
-                  pagination={slides.pagination}
-                > */}
+              <Swiper modules={[Autoplay, Pagination]} className="mySwiper" spaceBetween={slides.spaceBetween} pagination={true} autoplay={{delay: 2000}}>
+
                 { prizes.map((prize, index) => (
                   <SwiperSlide key={index}>
                     <picture className="start-page__prize">
@@ -88,7 +83,6 @@ function StartPage() {
                   </SwiperSlide>
                 )
                 )}
-              {/* </swiper-container> */}
               </Swiper>
             </div>
             <div className="start-page__text">{'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pellentesque gravida leo, fringilla varius velit ornare id. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam lacinia mauris nec metus porttitor sagittis.'}</div>

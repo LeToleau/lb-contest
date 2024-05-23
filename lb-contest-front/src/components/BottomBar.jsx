@@ -71,8 +71,14 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
           } else if (window.innerWidth <= 768) {
             scrollAmount = (-elemWidth * 3) - 10;
           }
-  
-          current.style.translate = direction === -1 ? `${scrollAmount}px` : "0px";
+
+          if (direction === -1) {
+            current.style.translate = `${scrollAmount}px`;
+            current.parentNode.classList.add('scrolled');
+          } else {
+            current.style.translate = "0px";
+            current.parentNode.classList.remove('scrolled');
+          }
         }
 
         let bounds = {
@@ -248,7 +254,6 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
         bottles.forEach((bottle) => {
           const bottleRect = bottle.getBoundingClientRect();
           const id = bottle.getAttribute('id');
-          // console.log(bottleRect.bottom + 40)
           if (
             (droppedElementRect.left + (droppedElementRect.width / 2)) >= bottleRect.left &&
             (droppedElementRect.top + (droppedElementRect.height / 2)) >= bottleRect.top &&
@@ -389,14 +394,12 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
             height: element.node.getBoundingClientRect().height
           };
           console.log(bottleRect)
-
-          let offset = window.innerWidth > 600 ? 200 : 0;
   
           if (
             (droppedElementRect.left + (droppedElementRect.width / 2)) >= bottleRect.left &&
             (droppedElementRect.top + (droppedElementRect.height / 2)) >= bottleRect.top &&
             (droppedElementRect.left + (droppedElementRect.width / 2)) <= bottleRect.right &&
-            (droppedElementRect.top + (droppedElementRect.height / 2)) <= bottleRect.bottom //- offset
+            (droppedElementRect.top + (droppedElementRect.height / 2)) <= bottleRect.bottom
           ) {
             bottle.style.transition = `.2s`;
             bottle.style.filter = `drop-shadow(0px 0px 6px grey)`;
@@ -411,7 +414,6 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
         element.node.style.cursor = 'grabbing';
         element.node.style.transition = 'none';
         element.node.style.zIndex = 999999;
-        // console.log(element);
     }
 
   return (

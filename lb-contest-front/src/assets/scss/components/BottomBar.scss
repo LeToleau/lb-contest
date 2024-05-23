@@ -15,6 +15,29 @@
         @media (max-width: 768px) {
             padding: 15px 0;
         }
+
+        .left,
+        .right {
+            transition: .5s ease-in-out;
+        }
+
+        .left {
+            opacity: 0;
+        }
+
+        .right {
+            opacity: 1;
+        }
+
+        &.scrolled {
+            .left {
+                opacity: 1;
+            }
+
+            .right {
+                opacity: 0;
+            }
+        }
     }
 
     &__arrow {
