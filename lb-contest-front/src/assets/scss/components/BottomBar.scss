@@ -111,8 +111,12 @@
         top: .5vw;
         z-index: 2;
         transition: .2s;
+        border-radius: 50%;
         transition-delay: .1s;
         opacity: 0;
+        background-color: white;
+        pointer-events: none;
+        user-select: none;
 
         @media (max-width: 768px) {
             width: 3vw;
