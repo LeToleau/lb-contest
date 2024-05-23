@@ -146,6 +146,12 @@
             }
 
         }
+
+        .swiper-wrapper {
+            @media (min-width: 769px) {
+                transform: none !important;
+            }
+        }
         
         .swiper-slide {
             max-width: 311px;
