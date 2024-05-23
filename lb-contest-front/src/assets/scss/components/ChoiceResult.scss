@@ -1,9 +1,9 @@
 .choice-result {
-    max-width: max-content;
-    max-height: max-content;
-    padding: 6px;
-    border-radius: 5px;
-    color: white;
+    height: 6vw;
+    width: 6vw;
+    // padding: 6px;
+    border-radius: 50%;
+    background-color: white;
     font-family: Augustea;
     font-size: 12px;
     font-weight: 800;
@@ -12,18 +12,30 @@
     transition: opacity .3s, transform .5s;
     letter-spacing: 1px;
 
-    position: absolute;
+    position: absolute !important;
     top: 0;
     right: 0;
-    bottom: 300px;
+    bottom: 300px !important;
     left: 0;
     margin: auto;
+    z-index: 2;
+
+    @media (max-width: 768px) {
+        height: 10vw;
+        width: 10vw;
+    }
 
     &.right {
-        background-color: rgb(112, 211, 112);
+        // background-color: rgb(112, 211, 112);
     }
 
     &.wrong {
-        background-color: rgb(212, 92, 92);
+        // background-color: rgb(212, 92, 92);
+    }
+
+    img {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
     }
 }
