@@ -37,11 +37,12 @@ function Quasi() {
       <div className="quasi__card">
         <div className="quasi__text-wrapper">
           <h1>C&rsquo;ERI QUASI!</h1>
-          <h2>lorem ipsum dolor sit amet, consectatur adipiscing elit</h2>
-          <div className="button">
-            <PlayBtn text={'Torna Indietro'} onClick={handlePlayClick} />
-          </div>
+          <h2>Non hai vinto</h2>
+          <p>Ti terremo aggiornato sulle future iniziative di Laura Biagiotti Parfums</p>
         </div>
+      </div>
+      <div className="button">
+        <PlayBtn text={`Torna All'Inizio`} onClick={handlePlayClick} />
       </div>
     </div>
   );
