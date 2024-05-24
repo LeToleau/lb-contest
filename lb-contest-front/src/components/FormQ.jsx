@@ -23,49 +23,50 @@ function Form() {
   const navigate = useNavigate()
   
   function handleSubmit(e) {
-    /*
-      Previene el comportamiento default de los
-      formularios el cual recarga el sitio
-    */
    e.preventDefault();
 
-    // Aquí puedes enviar los datos al backend
-    console.log(formData);
-    // Reiniciar el estado del formulario después de enviar los datos
-    setFormData({
-      name: '',
-      lastname: '',
-      email: '',
-      phone: '',
-      taxCode: '',
-      city: '',
-      postCode: '',
-      province: '',
-      address: '',
-      termsConditions: isChecked,
-    });
+   const isValidated = Object.values(formData).some(value => value === '');
+   let validations = isValidated ? false : true;
 
-    setTimeout(() => {
-      navigate('/quasi')
-    }, 200);
+   // Aquí puedes enviar los datos al backend
+   console.log(formData);
+    
+    if (validations) {
+      // Reiniciar el estado del formulario después de enviar los datos
+      setFormData({
+        name: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        taxCode: '',
+        city: '',
+        postCode: '',
+        province: '',
+        address: '',
+        termsConditions: true,
+      });
+      setTimeout(() => {
+        navigate('/quasi')
+      }, 200);
+    } else {
+      alert('Por favor, rellene todos los campos del formulario')
+    }
   }
 
   function handleCheckbox() {
-    if (isChecked === true) {
-      setIsChecked(false)
-    } else {
-      setIsChecked(true);
-    }
+    setFormData(
+      {
+        ...formData,
+        termsConditions: !formData.termsConditions
+      }
+    );
+    
+    console.log(formData.termsConditions);
   }
 
 
   function handleChange(e) {
-    // const { name, value, checked, type } = e.target;
-
-    //const newValue = type === 'checkbox' ? checked : value;
-    
     // Sincroniza el estado de nuevo
-    console.log(e.target.value)
     setFormData(
       {
         ...formData,
@@ -196,7 +197,6 @@ function Form() {
               id="terms-conditions"
               name="terms-conditions"
               type="checkbox"
-              checked={isChecked}
               onChange={handleCheckbox}
             />
             <span>Iscrivendomi, accetto i <a href="">Termini di Servizio</a> e l&rsquo;<a href="">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
