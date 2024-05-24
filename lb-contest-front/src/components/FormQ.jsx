@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import '../assets/scss/components/Form.scss';
 
 function Form() {
-  const [isChecked, setIsChecked] = useState(false);
+  const [validationMsg, setValidationMsg] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     lastname: '',
@@ -26,13 +26,42 @@ function Form() {
    e.preventDefault();
 
    const isValidated = Object.values(formData).some(value => value === '');
-   let validations = isValidated ? false : true;
+   let validations = !isValidated;
 
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   const validMail = emailRegex.test(formData.email);
+
+   const postalCodeRegex = /^\d{5}$/;
+   const validPostalCode = postalCodeRegex.test(formData.postCode);
+
+   const taxCodeRegex = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
+   const validTaxCode = taxCodeRegex.test(formData.taxCode);
    // Aquí puedes enviar los datos al backend
-   console.log(formData);
+   //console.log(formData);
+
+   const conditions = {
+    valid: validations && formData.termsConditions && validMail && validPostalCode && validTaxCode,
+    incompleteForm: !validations,
+    invalidEmail: /*validations && formData.termsConditions && */ !validMail /*&& validPostalCode && validTaxCode*/,
+    invalidTaxCode: /*validations && formData.termsConditions && validMail && validPostalCode &&*/ !validTaxCode,
+    invalidPostalCode: /*validations && formData.termsConditions && validMail &&*/ !validPostalCode /*&& validTaxCode*/,
+    termsNotAccepted: /*validations &&*/ !formData.termsConditions /*&& validMail && validPostalCode && validTaxCode*/,
+   };
+
+   const validationMessages = {
+    valid: '',
+    incompleteForm: `*Si prega di compilare tutti i campi del modulo`,
+    invalidEmail: `*Il formato dell'email non è corretto, inseriscilo correttamente`,
+    invalidTaxCode: `*Il formato del codice fiscale non è corretto, inseriscilo correttamente`,
+    invalidPostalCode: `*Il formato del CAP non è corretto, deve contenere esattamente 5 cifre`,
+    termsNotAccepted: `*Per continuare è necessario accettare i Termini e Condizioni`,
+   };
+
+   const conditionKey = Object.keys(conditions).find(key => conditions[key]);
     
-    if (validations) {
+    if (conditionKey === 'valid') {
       // Reiniciar el estado del formulario después de enviar los datos
+      setValidationMsg(validationMessages.valid);
       setFormData({
         name: '',
         lastname: '',
@@ -43,13 +72,13 @@ function Form() {
         postCode: '',
         province: '',
         address: '',
-        termsConditions: true,
+        termsConditions: false,
       });
       setTimeout(() => {
         navigate('/quasi')
       }, 200);
-    } else {
-      alert('Por favor, rellene todos los campos del formulario')
+    }  else {
+      setValidationMsg(validationMessages[conditionKey]);
     }
   }
 
@@ -60,8 +89,6 @@ function Form() {
         termsConditions: !formData.termsConditions
       }
     );
-    
-    console.log(formData.termsConditions);
   }
 
 
@@ -200,6 +227,9 @@ function Form() {
               onChange={handleCheckbox}
             />
             <span>Iscrivendomi, accetto i <a href="">Termini di Servizio</a> e l&rsquo;<a href="">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
+          </div>
+          <div className="form__row checkbox">
+            <span style={{color: 'red', fontSize: '14px'}}>{validationMsg}</span>
           </div>
           <div className="form__row submit-button">
             <PlayBtn text={'Invia'} onClick={handleSubmit} />
