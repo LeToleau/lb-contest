@@ -51,7 +51,7 @@ function WinPage() {
         setVersion({
           cssClass: "version-2",
           bgd: Bgd2,
-          text: "Hai vinto un weekend tra le acque termali di Roma",
+          text: "Hai vinto un weekend alle acque termali di Roma",
           text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
         });
         break;
@@ -90,7 +90,7 @@ function WinPage() {
         </div>
       </div>
       <div className="button">
-        <PlayBtn text={'Ottenere Regalo'} onClick={handlePlayClick} />
+        <PlayBtn text={`Torna All'Inizio`} onClick={handlePlayClick} />
       </div>
     </div>
   );
