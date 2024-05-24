@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import '../assets/scss/components/Form.scss';
 
 function Form() {
-  const [isChecked, setIsChecked] = useState(false);
+  const [validationMsg, setValidationMsg] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     lastname: '',
@@ -23,43 +23,76 @@ function Form() {
   const navigate = useNavigate()
   
   function handleSubmit(e) {
-    /*
-      Previene el comportamiento default de los
-      formularios el cual recarga el sitio
-    */
-    e.preventDefault();
+   e.preventDefault();
 
-    // Aquí puedes enviar los datos al backend
-    console.log(formData);
-    // Reiniciar el estado del formulario después de enviar los datos
-    setFormData({
-      name: '',
-      lastname: '',
-      email: '',
-      phone: '',
-      taxCode: '',
-      city: '',
-      postCode: '',
-      province: '',
-      address: '',
-      termsConditions: isChecked,
-    });
+   const isValidated = Object.values(formData).some(value => value === '');
+   let validations = !isValidated;
 
-    setTimeout(() => {
-      navigate('/win-page')
-    }, 200);
-  }
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   const validMail = emailRegex.test(formData.email);
 
-  function handleCheckbox() {
-    if (isChecked === true) {
-      setIsChecked(false)
-    } else {
-      setIsChecked(true);
+   const postalCodeRegex = /^\d{5}$/;
+   const validPostalCode = postalCodeRegex.test(formData.postCode);
+
+   const taxCodeRegex = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
+   const validTaxCode = taxCodeRegex.test(formData.taxCode);
+   // Aquí puedes enviar los datos al backend
+   //console.log(formData);
+
+   const conditions = {
+    valid: validations && formData.termsConditions && validMail && validPostalCode && validTaxCode,
+    incompleteForm: !validations,
+    invalidEmail: /*validations && formData.termsConditions && */ !validMail /*&& validPostalCode && validTaxCode*/,
+    invalidTaxCode: /*validations && formData.termsConditions && validMail && validPostalCode &&*/ !validTaxCode,
+    invalidPostalCode: /*validations && formData.termsConditions && validMail &&*/ !validPostalCode /*&& validTaxCode*/,
+    termsNotAccepted: /*validations &&*/ !formData.termsConditions /*&& validMail && validPostalCode && validTaxCode*/,
+   };
+
+   const validationMessages = {
+    valid: '',
+    incompleteForm: `*Si prega di compilare tutti i campi del modulo`,
+    invalidEmail: `*Il formato dell'email non è corretto, inseriscilo correttamente`,
+    invalidTaxCode: `*Il formato del codice fiscale non è corretto, inseriscilo correttamente`,
+    invalidPostalCode: `*Il formato del CAP non è corretto, deve contenere esattamente 5 cifre`,
+    termsNotAccepted: `*Per continuare è necessario accettare i Termini e Condizioni`,
+   };
+
+   const conditionKey = Object.keys(conditions).find(key => conditions[key]);
+    
+    if (conditionKey === 'valid') {
+      // Reiniciar el estado del formulario después de enviar los datos
+      setValidationMsg(validationMessages.valid);
+      setFormData({
+        name: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        taxCode: '',
+        city: '',
+        postCode: '',
+        province: '',
+        address: '',
+        termsConditions: false,
+      });
+      setTimeout(() => {
+        navigate('/win-page')
+      }, 200);
+    }  else {
+      setValidationMsg(validationMessages[conditionKey]);
     }
   }
 
+  function handleCheckbox() {
+    setFormData(
+      {
+        ...formData,
+        termsConditions: !formData.termsConditions
+      }
+    );
+  }
 
-  function handleChange(e) {    
+
+  function handleChange(e) {
     // Sincroniza el estado de nuevo
     setFormData(
       {
@@ -191,10 +224,12 @@ function Form() {
               id="terms-conditions"
               name="terms-conditions"
               type="checkbox"
-              // checked={isChecked}
-              // onChange={handleCheckbox}
+              onChange={handleCheckbox}
             />
             <span>Iscrivendomi, accetto i <a href="">Termini di Servizio</a> e l&rsquo;<a href="">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
+          </div>
+          <div className="form__row checkbox">
+            <span style={{color: 'red', fontSize: '14px'}}>{validationMsg}</span>
           </div>
           <div className="form__row submit-button">
             <PlayBtn text={'Invia'} onClick={handleSubmit} />
