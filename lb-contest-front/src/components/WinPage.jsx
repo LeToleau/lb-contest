@@ -5,8 +5,8 @@ import Geles from '../assets/img/perfumes.png';
 import PlayBtn from './buttons/Button';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
 import '../assets/scss/components/WinPage.scss';
+import axios from 'axios';
 
 // Componente que muestra la imagen de fondo y el botón de play
 
@@ -25,40 +25,64 @@ function WinPage() {
       backgroundImage: `url(${version.bgd})`,
   };
 
-  useEffect(() => {
-    const result = Math.floor(Math.random() * 3) + 1;
+  function formatTimestamp(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    switch (result) {
-      case 1:
-        setVersion({
-          cssClass: "version-1",
-          bgd: Bgd,
-          text: "Hai vinto uno dei profumi di Aqve Romane",
-          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
-          img: Geles,
-        });
-        break;
-      case 2:
-        setVersion({
-          cssClass: "version-1",
-          bgd: Bgd,
-          text: "Hai Vinto una body lotion di Aqve Romane",
-          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
-          img: Perfumes,
-        });
-        break;
-      case 3:
-        setVersion({
-          cssClass: "version-2",
-          bgd: Bgd2,
-          text: "Hai vinto un weekend alle acque termali di Roma",
-          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
-        });
-        break;
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  const fetchPrize = async (url) => {
+    try {
+      const response = await axios.get(url);
+
+      if (response.status === 200) {
+        console.log(`Premio asignado: ${response.data.prize}`, response.data);
+
+        switch (response.data.prize) {
+          case "prize2":
+            setVersion({
+              cssClass: "version-1",
+              bgd: Bgd,
+              text: "Hai vinto uno dei profumi di Aqve Romane",
+              text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+              img: Geles,
+            });
+            break;
+          case "prize3":
+            setVersion({
+              cssClass: "version-1",
+              bgd: Bgd,
+              text: "Hai Vinto una body lotion di Aqve Romane",
+              text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+              img: Perfumes,
+            });
+            break;
+          case "prize1":
+            setVersion({
+              cssClass: "version-2",
+              bgd: Bgd2,
+              text: "Hai vinto un weekend alle acque termali di Roma",
+              text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+            });
+            break;
+        }
+      } else {
+        console.error('Error al agregar participante', response.data);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
+  };
 
-    //document.querySelector('.main-background__logo').style.transform = `translate(0px, 0px)`;
-    //document.querySelector('.button').style.transform = `translate(0px, 0px)`;
+  useEffect(() => {
+    const date = new Date();
+
+    fetchPrize(`http://localhost:3000/api/winners/${formatTimestamp(date)}`);
 
     setTimeout(()=>{
       document.querySelector('.win-page').style.opacity = 1;

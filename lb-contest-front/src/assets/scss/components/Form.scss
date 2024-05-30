@@ -28,29 +28,30 @@
     @media (max-width: 992px) and (max-height: 415px) {
         height: auto;
         padding: 40px;
-        // background-size: 200%;
         background-position-y: center;
     }
-
+    
     @media (max-height: 768px) {
         min-height: 100vh;
         height: auto;
         padding: 6.25vh 30px;
     }
-
+    
     &__form {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
+        
         background-color: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(10px);
         padding: 12px;
         border-radius: 5px;
-        transition: all .5s .8s;
-    }
 
+        opacity: 0;
+        transition: .5s .3s;
+    }
+    
     &__wrapper {
         border: 1.5px solid #000000;
         padding: 22px 95px 42px;
