@@ -126,13 +126,24 @@ function Form() {
 
   function handleChange(e) {
     // Sincroniza el estado de nuevo
-    setFormData(
-      {
-        ...formData,
-        [e.target.name]: e.target.value
-
-      }
-    );
+    if (e.target.name === 'taxCode') {
+      const value = e.target.value.toUpperCase();
+      setFormData(
+        {
+          ...formData,
+          [e.target.name]: value
+  
+        }
+      );
+    } else {
+      setFormData(
+        {
+          ...formData,
+          [e.target.name]: e.target.value
+  
+        }
+      );
+    }
   }
 
   const estiloDelDiv = {
