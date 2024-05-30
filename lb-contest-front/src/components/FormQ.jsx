@@ -2,7 +2,7 @@ import Bgd from '../assets/img/main-bgd.png';
 import PlayBtn from './buttons/Button';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import '../assets/scss/components/Form.scss';
 
 function Form() {
@@ -18,80 +18,97 @@ function Form() {
     province: '',
     address: '',
     termsConditions: false,
+    // timestamp: '',
   });
 
   const navigate = useNavigate()
   
-  async function handleSubmit(e) {
-   e.preventDefault();
+  /*async*/ function handleSubmit(e) {
+    e.preventDefault();
 
-   const isValidated = Object.values(formData).some(value => value === '');
-   let validations = !isValidated;
+    /*
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      timestamp: new Date().toISOString(),
+    }));
+    */
 
-   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-   const validMail = emailRegex.test(formData.mail);
+    const isValidated = Object.values(formData).some(value => value === '');
+    let validations = !isValidated;
 
-   const postalCodeRegex = /^\d{5}$/;
-   const validPostalCode = postalCodeRegex.test(formData.postCode);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const validMail = emailRegex.test(formData.mail);
 
-   const taxCodeRegex = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
-   const validTaxCode = taxCodeRegex.test(formData.taxCode);
-   // Aquí puedes enviar los datos al backend
-   //console.log(formData);
+    const postalCodeRegex = /^\d{5}$/;
+    const validPostalCode = postalCodeRegex.test(formData.postCode);
 
-   const conditions = {
+    const taxCodeRegex = /^[A-Z]{3}[A-Z]{3}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
+    const validTaxCode = taxCodeRegex.test(formData.taxCode);
+
+    const conditions = {
     valid: validations && formData.termsConditions && validMail && validPostalCode && validTaxCode,
     incompleteForm: !validations,
     invalidEmail: /*validations && formData.termsConditions && */ !validMail /*&& validPostalCode && validTaxCode*/,
     invalidTaxCode: /*validations && formData.termsConditions && validMail && validPostalCode &&*/ !validTaxCode,
     invalidPostalCode: /*validations && formData.termsConditions && validMail &&*/ !validPostalCode /*&& validTaxCode*/,
     termsNotAccepted: /*validations &&*/ !formData.termsConditions /*&& validMail && validPostalCode && validTaxCode*/,
-   };
+    };
 
-   const validationMessages = {
+    const validationMessages = {
     valid: '',
     incompleteForm: `*Si prega di compilare tutti i campi del modulo`,
     invalidEmail: `*Il formato dell'email non è corretto, inseriscilo correttamente`,
     invalidTaxCode: `*Il formato del codice fiscale non è corretto, inseriscilo correttamente`,
     invalidPostalCode: `*Il formato del CAP non è corretto, deve contenere esattamente 5 cifre`,
     termsNotAccepted: `*Per continuare è necessario accettare i Termini e Condizioni`,
-   };
+    };
 
    const conditionKey = Object.keys(conditions).find(key => conditions[key]);
     
     if (conditionKey === 'valid') {
       setValidationMsg(validationMessages.valid);
-      // document.querySelector('.form').style.opacity = 0;
 
+      setTimeout(() => {
+        navigate('/quasi');
+      }, 300);
+      
+      /*
       try {
         const response = await axios.post('http://localhost:3000/api/participants', formData);
         if (response.status === 201) {
           console.log('Participante agregado con éxito:', response.data);
           // Reiniciar el estado del formulario después de enviar los datos
-          setFormData({
-            name: '',
-            lastname: '',
-            mail: '',
-            phone: '',
-            taxCode: '',
-            city: '',
-            postCode: '',
-            province: '',
-            address: '',
-            termsConditions: false,
-          });
+
+          if (!response.data.registered) {
+            setFormData({
+              name: '',
+              lastname: '',
+              mail: '',
+              phone: '',
+              taxCode: '',
+              city: '',
+              postCode: '',
+              province: '',
+              address: '',
+              termsConditions: false,
+            });
+
+            setTimeout(() => {
+              if (response.data.prize !== 'no prize') {
+                navigate('/win-page');
+              } else {
+                navigate('/quasi');
+              }
+            }, 200);
+          } else {
+            setValidationMsg('Participant Already Registered');
+          }
         } else {
           console.error('Error al agregar participante', response.data);
         }
       } catch (error) {
         console.error('Error al enviar la solicitud', error);
       }
-
-
-      /*
-      setTimeout(() => {
-        navigate('/win-page')
-      }, 200);
       */
     }  else {
       setValidationMsg(validationMessages[conditionKey]);
@@ -107,13 +124,13 @@ function Form() {
     );
   }
 
-
   function handleChange(e) {
     // Sincroniza el estado de nuevo
     setFormData(
       {
         ...formData,
         [e.target.name]: e.target.value
+
       }
     );
   }

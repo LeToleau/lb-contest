@@ -2,7 +2,7 @@ import Bgd from '../assets/img/main-bgd.png';
 import PlayBtn from './buttons/Button';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import '../assets/scss/components/Form.scss';
 
 function Form() {
@@ -18,18 +18,20 @@ function Form() {
     province: '',
     address: '',
     termsConditions: false,
-    timestamp: '',
+    // timestamp: '',
   });
 
   const navigate = useNavigate()
   
-  async function handleSubmit(e) {
+  /*async*/ function handleSubmit(e) {
     e.preventDefault();
 
+    /*
     setFormData(prevFormData => ({
       ...prevFormData,
       timestamp: new Date().toISOString(),
     }));
+    */
 
     const isValidated = Object.values(formData).some(value => value === '');
     let validations = !isValidated;
@@ -42,8 +44,6 @@ function Form() {
 
     const taxCodeRegex = /^[A-Z]{3}[A-Z]{3}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
     const validTaxCode = taxCodeRegex.test(formData.taxCode);
-    // Aquí puedes enviar los datos al backend
-    //console.log(formData);
 
     const conditions = {
     valid: validations && formData.termsConditions && validMail && validPostalCode && validTaxCode,
@@ -67,8 +67,12 @@ function Form() {
     
     if (conditionKey === 'valid') {
       setValidationMsg(validationMessages.valid);
-      // document.querySelector('.form').style.opacity = 0;
 
+      setTimeout(() => {
+        navigate('/win-page');
+      }, 300);
+
+      /*
       try {
         const response = await axios.post('http://localhost:3000/api/participants', formData);
         if (response.status === 201) {
@@ -105,9 +109,6 @@ function Form() {
       } catch (error) {
         console.error('Error al enviar la solicitud', error);
       }
-
-      /*
-
       */
     }  else {
       setValidationMsg(validationMessages[conditionKey]);
@@ -129,6 +130,7 @@ function Form() {
       {
         ...formData,
         [e.target.name]: e.target.value
+
       }
     );
   }

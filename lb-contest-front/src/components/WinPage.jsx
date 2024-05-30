@@ -36,6 +36,7 @@ function WinPage() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
+  /*
   const fetchPrize = async (url) => {
     try {
       const response = await axios.get(url);
@@ -78,11 +79,45 @@ function WinPage() {
       console.log(error.message);
     }
   };
+  */
 
   useEffect(() => {
+    /*
     const date = new Date();
 
     fetchPrize(`http://localhost:3000/api/winners/${formatTimestamp(date)}`);
+    */
+
+    const result = Math.floor(Math.random() * 3) + 1;
+
+    switch (result) {
+      case 1:
+        setVersion({
+          cssClass: "version-1",
+          bgd: Bgd,
+          text: "Hai vinto uno dei profumi di Aqve Romane",
+          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+          img: Geles,
+        });
+        break;
+      case 2:
+        setVersion({
+          cssClass: "version-1",
+          bgd: Bgd,
+          text: "Hai Vinto una body lotion di Aqve Romane",
+          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+          img: Perfumes,
+        });
+        break;
+      case 3:
+        setVersion({
+          cssClass: "version-2",
+          bgd: Bgd2,
+          text: "Hai vinto un weekend alle acque termali di Roma",
+          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+        });
+        break;
+    }
 
     setTimeout(()=>{
       document.querySelector('.win-page').style.opacity = 1;
