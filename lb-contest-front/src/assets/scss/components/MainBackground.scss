@@ -13,7 +13,7 @@
 
     opacity: 0;
     transition: .3s;
-    background-position: top center;
+    background-position: center;
 
     @media (max-width: 768px) {
         background-image: url('../../img/main-bgd-tablet.png') !important;
