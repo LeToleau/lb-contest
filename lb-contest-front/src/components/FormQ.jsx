@@ -5,6 +5,47 @@ import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 import '../assets/scss/components/Form.scss';
 
+const cities = [
+  "Roma", "Milano", "Napoli", "Torino", "Palermo", "Genova", "Bologna",
+  "Firenze", "Bari", "Catania", "Venezia", "Verona", "Messina", "Padova",
+  "Trieste", "Taranto", "Brescia", "Parma", "Prato", "Modena", "Reggio Calabria",
+  "Reggio Emilia", "Perugia", "Livorno", "Ravenna", "Cagliari", "Foggia",
+  "Rimini", "Salerno", "Ferrara", "Sassari", "Latina", "Giugliano in Campania",
+  "Monza", "Siracusa", "Bergamo", "Pescara", "Trento", "Forlì", "Vicenza",
+  "Terni", "Novara", "Ancona", "Piacenza", "Arezzo", "Udine", "Cesena",
+  "Lecce", "La Spezia", "Pesaro", "Barletta", "Alessandria", "Pistoia", "Lucca",
+  "Catanzaro", "Brindisi", "Treviso", "Busto Arsizio", "Marsala", "Como",
+  "Grosseto", "Ragusa", "Trapani", "Sesto San Giovanni", "Varese", "Guidonia Montecelio",
+  "Cosenza", "Gela", "Pavia", "Cremona", "Carpi", "Fiumicino", "Benevento",
+  "Casoria", "Cinisello Balsamo", "Bitonto", "Massa", "Matera", "Carrara",
+  "Asti", "Vigevano", "Caltanissetta", "Viareggio", "Trapani", "Scafati",
+  "Crotone", "Vittoria", "Fano", "Savona", "L'Aquila", "Avellino", "Viterbo",
+  "Battipaglia", "Altamura", "Chieti", "Olbia", "Agrigento", "Imola", "Legnano",
+  "Molfetta", "Castellammare di Stabia", "Civitavecchia", "Aversa", "Cava de' Tirreni",
+  "Lamezia Terme", "Marano di Napoli", "Moncalieri", "Trani", "Portici",
+  "Pozzuoli", "San Severo", "Gallarate", "Vercelli", "Bagheria", "Pomezia",
+  "Modica", "Rho", "Cecina", "Frosinone", "Senigallia", "Pietrasanta", "Riccione"
+];
+const provinces = [
+  "Agrigento", "Alessandria", "Ancona", "Aosta", "Arezzo", "Ascoli Piceno",
+  "Asti", "Avellino", "Bari", "Barletta-Andria-Trani", "Belluno", "Benevento",
+  "Bergamo", "Biella", "Bologna", "Bolzano", "Brescia", "Brindisi", "Cagliari",
+  "Caltanissetta", "Campobasso", "Carbonia-Iglesias", "Caserta", "Catania",
+  "Catanzaro", "Chieti", "Como", "Cosenza", "Cremona", "Crotone", "Cuneo",
+  "Enna", "Fermo", "Ferrara", "Firenze", "Foggia", "Forlì-Cesena", "Frosinone",
+  "Genova", "Gorizia", "Grosseto", "Imperia", "Isernia", "L'Aquila", "La Spezia",
+  "Latina", "Lecce", "Lecco", "Livorno", "Lodi", "Lucca", "Macerata", "Mantova",
+  "Massa-Carrara", "Matera", "Medio Campidano", "Messina", "Milano", "Modena",
+  "Monza e Brianza", "Napoli", "Novara", "Nuoro", "Ogliastra", "Oristano", 
+  "Padova", "Palermo", "Parma", "Pavia", "Perugia", "Pesaro e Urbino", "Pescara",
+  "Piacenza", "Pisa", "Pistoia", "Pordenone", "Potenza", "Prato", "Ragusa",
+  "Ravenna", "Reggio Calabria", "Reggio Emilia", "Rieti", "Rimini", "Roma",
+  "Rovigo", "Salerno", "Sassari", "Savona", "Siena", "Siracusa", "Sondrio",
+  "Taranto", "Teramo", "Terni", "Torino", "Trapani", "Trento", "Treviso",
+  "Trieste", "Udine", "Varese", "Venezia", "Verbania", "Vercelli", "Verona",
+  "Vibo Valentia", "Vicenza", "Viterbo"
+];
+
 function Form() {
   const [validationMsg, setValidationMsg] = useState('');
   const [formData, setFormData] = useState({
@@ -20,6 +61,11 @@ function Form() {
     termsConditions: false,
     // timestamp: '',
   });
+
+  const [filteredCities, setFilteredCities] = useState([]);
+  const [filteredProvinces, setFilteredProvinces] = useState([]);
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const [showProvinceDropdown, setShowProvinceDropdown] = useState(false);
 
   const navigate = useNavigate()
   
@@ -69,9 +115,9 @@ function Form() {
       setValidationMsg(validationMessages.valid);
 
       setTimeout(() => {
-        navigate('/quasi');
+        navigate('/win-page');
       }, 300);
-      
+
       /*
       try {
         const response = await axios.post('http://localhost:3000/api/participants', formData);
@@ -144,7 +190,46 @@ function Form() {
         }
       );
     }
+
+    if (e.target.name === 'city') {
+      const filtered = cities.filter(city => city.toLowerCase().includes(e.target.value.toLowerCase()));
+      setFilteredCities(filtered);
+      setShowCityDropdown(filtered.length > 0 && !filtered.includes(e.target.value));
+      setShowProvinceDropdown(false);
+    } else if (e.target.name === 'province') {
+      const filtered = provinces.filter(province => province.toLowerCase().includes(e.target.value.toLowerCase()));
+      setFilteredProvinces(filtered);
+      setShowProvinceDropdown(filtered.length > 0 && !filtered.includes(e.target.value));
+      setShowCityDropdown(false);
+    }
   }
+
+  function handleCitySelect(city) {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      city: city
+    }));
+    setShowCityDropdown(false);
+  }
+
+  function handleProvinceSelect(province) {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      province: province
+    }));
+    setShowProvinceDropdown(false);
+  }
+
+  const handleFormClick = (e) => {
+    if (e.target.name !== 'city' && e.target.name !== 'province') {
+      setShowCityDropdown(false);
+      setShowProvinceDropdown(false);
+    } else if (e.target.name === 'city') {
+      setShowProvinceDropdown(false);
+    } else if (e.target.name === 'province') {
+      setShowCityDropdown(false);
+    }
+  };
 
   const estiloDelDiv = {
       backgroundImage: `url(${Bgd})`,
@@ -157,7 +242,7 @@ function Form() {
   }, [])
 
   return (
-    <div className="form" style={estiloDelDiv}>
+    <div className="form" style={estiloDelDiv} onClick={handleFormClick}>
       <form className="form__form" onSubmit={handleSubmit}>
         <div className="form__wrapper">
           <h1>Inserisci i tuoi dati e scopri se sei il vincitore</h1>
@@ -216,7 +301,18 @@ function Form() {
                 placeholder="Cittá"
                 value={formData.city}
                 onChange={handleChange}
+                onFocus={() => setShowCityDropdown(!filteredCities.includes(formData.city))}
+                onClick={handleFormClick}
               />
+              {showCityDropdown && (
+                <ul className="dropdown">
+                  {filteredCities.map((city, index) => (
+                    <li key={index} onClick={() => handleCitySelect(city)}>
+                      {city}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <input
                 id="post-code"
                 name="postCode"
@@ -233,7 +329,18 @@ function Form() {
               placeholder="Provincia"
               value={formData.province}
               onChange={handleChange}
+              onFocus={() => setShowProvinceDropdown(!filteredProvinces.includes(formData.province))}
+              onClick={handleFormClick}
             />
+            {showProvinceDropdown && (
+              <ul className="dropdown">
+                {filteredProvinces.map((province, index) => (
+                  <li key={index} onClick={() => handleProvinceSelect(province)}>
+                    {province}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="form__row">
             <input

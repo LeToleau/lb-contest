@@ -99,6 +99,7 @@
         gap: 32px;
         width: 100%;
         margin-bottom: 16px;
+        position: relative;
 
         @media (max-width: 768px) {
             gap: 18px;
@@ -130,14 +131,24 @@
             display: flex;
             gap: 32px;
             width: 100%;
+            
             @media (max-width: 767px) {
                 gap: 20px;
+            }
+
+            .dropdown {
+                left: 0 !important;
+
+                @media (max-width: 767px) {
+                    width: 48% !important;
+                    top: 40px !important;
+                }
             }
         }
 
         input#province {
             @media (min-width: 768px) {
-                width: 44%;
+                width: 46%;
             }
         }
         
@@ -160,6 +171,37 @@
                 max-width: 100%;
             }
 
+        }
+
+        .dropdown {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            top: 40px;
+            max-height: 200px;
+            overflow-y: auto;
+            width: calc(100% - 20px);
+            margin-top: 0;
+            padding-left: 0;
+            z-index: 1000;
+            list-style-type: none;
+            width: 31%;
+            right: 0;
+
+            @media (max-width: 767px) {
+                width: 100%;
+                top: 100px;
+            }
+            
+            li {
+                padding: 8px 12px;
+                cursor: pointer;
+                text-align: left;
+            
+                &:hover {
+                background-color: #f0f0f0;
+                }
+            }
         }
         
         &.checkbox {
