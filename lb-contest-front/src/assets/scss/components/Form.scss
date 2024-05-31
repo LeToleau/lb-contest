@@ -188,6 +188,19 @@
             width: 31%;
             right: 0;
 
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #00000021;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: #00000039;
+                border-radius: 3px;
+            }
+
             @media (max-width: 767px) {
                 width: 100%;
                 top: 100px;
