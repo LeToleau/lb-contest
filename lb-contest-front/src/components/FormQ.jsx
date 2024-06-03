@@ -4,27 +4,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../assets/scss/components/Form.scss';
-
-const provinces = [
-  "Abruzzo", "Agrigento", "Alessandria", "Alto Adige", "Ancona", "Arezzo", "Ascoli Piceno",
-  "Asti", "Avellino", "Bari", "Barletta-Andria-Trani", "Basilicata", "Belluno", "Benevento",
-  "Bergamo", "Biella", "Bologna", "Bolzano", "Brescia", "Brindisi", "Cagliari", "Calabria",
-  "Caltanissetta", "Campania", "Campobasso", "Carbonia-Iglesias", "Caserta", "Catania",
-  "Catanzaro", "Chieti", "Como", "Cosenza", "Cremona", "Crotone", "Cuneo", "Emilia-Romagna",
-  "Enna", "Fermo", "Ferrara", "Firenze", "Foggia", "Forlì-Cesena", "Friuli-Venezia Giulia",
-  "Frosinone", "Genova", "Gorizia", "Grosseto", "Imperia", "Isernia", "L'Aquila", "La Spezia",
-  "Latina", "Lazio", "Lecce", "Lecco", "Liguria", "Livorno", "Lodi", "Lombardia", "Lucca",
-  "Macerata", "Mantova", "Marche", "Massa-Carrara", "Matera", "Medio Campidano", "Messina",
-  "Milano", "Modena", "Molise", "Monza e Brianza", "Napoli", "Novara", "Nuoro", "Ogliastra",
-  "Olbia-Tempio", "Oristano", "Padova", "Palermo", "Parma", "Pavia", "Perugia", "Pesaro e Urbino",
-  "Pescara", "Piacenza", "Piemonte", "Pisa", "Pistoia", "Pordenone", "Potenza", "Prato",
-  "Puglia", "Ragusa", "Ravenna", "Reggio Calabria", "Reggio Emilia", "Rieti", "Rimini",
-  "Roma", "Rovigo", "Salerno", "Sardegna", "Sassari", "Savona", "Sicilia", "Siena", "Siracusa",
-  "Sondrio", "Taranto", "Teramo", "Terni", "Torino", "Toscana", "Trapani", "Trentino",
-  "Trentino-Alto Adige", "Trento", "Treviso", "Trieste", "Udine", "Umbria", "Valle d'Aosta",
-  "Varese", "Veneto", "Venezia", "Verbania", "Verbano-Cusio-Ossola", "Vercelli", "Verona",
-  "Vibo Valentia", "Vicenza", "Viterbo"
-];
+import dataCities from '../../gi_comuni.json';
+import dataProvinces from '../../gi_province.json';
 
 function Form() {
   const [validationMsg, setValidationMsg] = useState('');
@@ -43,24 +24,31 @@ function Form() {
   });
 
   const [cities, setCities] = useState([]);
+  const [provinces, setProvinces] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
-  const [filteredProvinces, setFilteredProvinces] = useState(provinces);
+  const [filteredProvinces, setFilteredProvinces] = useState();
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [showProvinceDropdown, setShowProvinceDropdown] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  async function fetchCities() {
-    try {
-      const response = await axios.post('https://countriesnow.space/api/v0.1/countries/cities', { country: "italy" });
-      if (!response.data.error) {
-        // console.log(response.data)
-        setCities(response.data.data)
-        // console.log(cities)
-      }
-    } catch (error) {
-      console.error('Error al enviar la solicitud', error);
-    }
+  function getCities() {
+    const listCities = [];
+    // console.log(allCities);
+    dataCities.forEach(city => {
+      // console.log(city)
+      listCities.push(city.denominazione_ita);
+    });
+    setCities(listCities);
+  }
+
+  function getProvinces() {
+    const listProvinces = [];
+    dataProvinces.forEach(province => {
+      //console.log(province)
+      listProvinces.push(province.denominazione_provincia);
+    });
+    setProvinces(listProvinces);
   }
   
   /*async*/ function handleSubmit(e) {
@@ -109,7 +97,7 @@ function Form() {
       setValidationMsg(validationMessages.valid);
 
       setTimeout(() => {
-        navigate('/win-page');
+        navigate('/quasi');
       }, 300);
 
       /*
@@ -193,7 +181,7 @@ function Form() {
     } else if (e.target.name === 'province') {
       const filtered = provinces.filter(province => province.toLowerCase().includes(e.target.value.toLowerCase()));
       setFilteredProvinces(filtered);
-      setShowProvinceDropdown(filtered.length > 0 && !filtered.includes(e.target.value));
+      setShowProvinceDropdown(!filtered.includes(e.target.value));
       setShowCityDropdown(false);
     }
   }
@@ -230,7 +218,9 @@ function Form() {
   };
 
   useEffect(() => {
-    fetchCities();
+    //fetchCities();
+    getCities();
+    getProvinces();
     setTimeout(()=>{
       document.querySelector('.form__form').style.opacity = 1;
     }, 100)
@@ -328,16 +318,20 @@ function Form() {
               placeholder="Provincia"
               value={formData.province}
               onChange={handleChange}
-              onFocus={() => setShowProvinceDropdown(!filteredProvinces.includes(formData.province))}
+              onFocus={() => setShowProvinceDropdown(formData.province === '' /*&& !filteredProvinces.includes(formData.province)*/)}
               onClick={handleFormClick}
             />
             {showProvinceDropdown && (
               <ul className="dropdown">
-                {filteredProvinces.map((province, index) => (
-                  <li key={index} onClick={() => handleProvinceSelect(province)}>
-                    {province}
-                  </li>
-                ))}
+                { filteredProvinces ? filteredProvinces.map((province, index) => (
+                    <li key={index} onClick={() => handleProvinceSelect(province)}>
+                      {province}
+                    </li>
+                  )) : provinces.map((province, index) => (
+                    <li key={index} onClick={() => handleProvinceSelect(province)}>
+                      {province}
+                    </li>
+                  )) }
               </ul>
             )}
           </div>
