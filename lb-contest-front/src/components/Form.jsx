@@ -2,47 +2,27 @@ import Bgd from '../assets/img/main-bgd.png';
 import PlayBtn from './buttons/Button';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 import '../assets/scss/components/Form.scss';
 
-const cities = [
-  "Roma", "Milano", "Napoli", "Torino", "Palermo", "Genova", "Bologna",
-  "Firenze", "Bari", "Catania", "Venezia", "Verona", "Messina", "Padova",
-  "Trieste", "Taranto", "Brescia", "Parma", "Prato", "Modena", "Reggio Calabria",
-  "Reggio Emilia", "Perugia", "Livorno", "Ravenna", "Cagliari", "Foggia",
-  "Rimini", "Salerno", "Ferrara", "Sassari", "Latina", "Giugliano in Campania",
-  "Monza", "Siracusa", "Bergamo", "Pescara", "Trento", "Forlì", "Vicenza",
-  "Terni", "Novara", "Ancona", "Piacenza", "Arezzo", "Udine", "Cesena",
-  "Lecce", "La Spezia", "Pesaro", "Barletta", "Alessandria", "Pistoia", "Lucca",
-  "Catanzaro", "Brindisi", "Treviso", "Busto Arsizio", "Marsala", "Como",
-  "Grosseto", "Ragusa", "Trapani", "Sesto San Giovanni", "Varese", "Guidonia Montecelio",
-  "Cosenza", "Gela", "Pavia", "Cremona", "Carpi", "Fiumicino", "Benevento",
-  "Casoria", "Cinisello Balsamo", "Bitonto", "Massa", "Matera", "Carrara",
-  "Asti", "Vigevano", "Caltanissetta", "Viareggio", "Trapani", "Scafati",
-  "Crotone", "Vittoria", "Fano", "Savona", "L'Aquila", "Avellino", "Viterbo",
-  "Battipaglia", "Altamura", "Chieti", "Olbia", "Agrigento", "Imola", "Legnano",
-  "Molfetta", "Castellammare di Stabia", "Civitavecchia", "Aversa", "Cava de' Tirreni",
-  "Lamezia Terme", "Marano di Napoli", "Moncalieri", "Trani", "Portici",
-  "Pozzuoli", "San Severo", "Gallarate", "Vercelli", "Bagheria", "Pomezia",
-  "Modica", "Rho", "Cecina", "Frosinone", "Senigallia", "Pietrasanta", "Riccione"
-];
 const provinces = [
-  "Agrigento", "Alessandria", "Ancona", "Aosta", "Arezzo", "Ascoli Piceno",
-  "Asti", "Avellino", "Bari", "Barletta-Andria-Trani", "Belluno", "Benevento",
-  "Bergamo", "Biella", "Bologna", "Bolzano", "Brescia", "Brindisi", "Cagliari",
-  "Caltanissetta", "Campobasso", "Carbonia-Iglesias", "Caserta", "Catania",
-  "Catanzaro", "Chieti", "Como", "Cosenza", "Cremona", "Crotone", "Cuneo",
-  "Enna", "Fermo", "Ferrara", "Firenze", "Foggia", "Forlì-Cesena", "Frosinone",
-  "Genova", "Gorizia", "Grosseto", "Imperia", "Isernia", "L'Aquila", "La Spezia",
-  "Latina", "Lecce", "Lecco", "Livorno", "Lodi", "Lucca", "Macerata", "Mantova",
-  "Massa-Carrara", "Matera", "Medio Campidano", "Messina", "Milano", "Modena",
-  "Monza e Brianza", "Napoli", "Novara", "Nuoro", "Ogliastra", "Oristano", 
-  "Padova", "Palermo", "Parma", "Pavia", "Perugia", "Pesaro e Urbino", "Pescara",
-  "Piacenza", "Pisa", "Pistoia", "Pordenone", "Potenza", "Prato", "Ragusa",
-  "Ravenna", "Reggio Calabria", "Reggio Emilia", "Rieti", "Rimini", "Roma",
-  "Rovigo", "Salerno", "Sassari", "Savona", "Siena", "Siracusa", "Sondrio",
-  "Taranto", "Teramo", "Terni", "Torino", "Trapani", "Trento", "Treviso",
-  "Trieste", "Udine", "Varese", "Venezia", "Verbania", "Vercelli", "Verona",
+  "Abruzzo", "Agrigento", "Alessandria", "Alto Adige", "Ancona", "Arezzo", "Ascoli Piceno",
+  "Asti", "Avellino", "Bari", "Barletta-Andria-Trani", "Basilicata", "Belluno", "Benevento",
+  "Bergamo", "Biella", "Bologna", "Bolzano", "Brescia", "Brindisi", "Cagliari", "Calabria",
+  "Caltanissetta", "Campania", "Campobasso", "Carbonia-Iglesias", "Caserta", "Catania",
+  "Catanzaro", "Chieti", "Como", "Cosenza", "Cremona", "Crotone", "Cuneo", "Emilia-Romagna",
+  "Enna", "Fermo", "Ferrara", "Firenze", "Foggia", "Forlì-Cesena", "Friuli-Venezia Giulia",
+  "Frosinone", "Genova", "Gorizia", "Grosseto", "Imperia", "Isernia", "L'Aquila", "La Spezia",
+  "Latina", "Lazio", "Lecce", "Lecco", "Liguria", "Livorno", "Lodi", "Lombardia", "Lucca",
+  "Macerata", "Mantova", "Marche", "Massa-Carrara", "Matera", "Medio Campidano", "Messina",
+  "Milano", "Modena", "Molise", "Monza e Brianza", "Napoli", "Novara", "Nuoro", "Ogliastra",
+  "Olbia-Tempio", "Oristano", "Padova", "Palermo", "Parma", "Pavia", "Perugia", "Pesaro e Urbino",
+  "Pescara", "Piacenza", "Piemonte", "Pisa", "Pistoia", "Pordenone", "Potenza", "Prato",
+  "Puglia", "Ragusa", "Ravenna", "Reggio Calabria", "Reggio Emilia", "Rieti", "Rimini",
+  "Roma", "Rovigo", "Salerno", "Sardegna", "Sassari", "Savona", "Sicilia", "Siena", "Siracusa",
+  "Sondrio", "Taranto", "Teramo", "Terni", "Torino", "Toscana", "Trapani", "Trentino",
+  "Trentino-Alto Adige", "Trento", "Treviso", "Trieste", "Udine", "Umbria", "Valle d'Aosta",
+  "Varese", "Veneto", "Venezia", "Verbania", "Verbano-Cusio-Ossola", "Vercelli", "Verona",
   "Vibo Valentia", "Vicenza", "Viterbo"
 ];
 
@@ -63,11 +43,24 @@ function Form() {
   });
 
   const [filteredCities, setFilteredCities] = useState([]);
-  const [filteredProvinces, setFilteredProvinces] = useState([]);
+  const [filteredProvinces, setFilteredProvinces] = useState(provinces);
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [showProvinceDropdown, setShowProvinceDropdown] = useState(false);
 
   const navigate = useNavigate()
+
+  async function fetchCities() {
+    try {
+      const response = await axios.post('https://countriesnow.space/api/v0.1/countries/cities', { country: "italy" });
+      if (!response.data.error) {
+        // console.log(response.data)
+        setFilteredCities(response.data.data)
+        // console.log(cities)
+      }
+    } catch (error) {
+      console.error('Error al enviar la solicitud', error);
+    }
+  }
   
   /*async*/ function handleSubmit(e) {
     e.preventDefault();
@@ -192,7 +185,7 @@ function Form() {
     }
 
     if (e.target.name === 'city') {
-      const filtered = cities.filter(city => city.toLowerCase().includes(e.target.value.toLowerCase()));
+      const filtered = filteredCities.filter(city => city.toLowerCase().includes(e.target.value.toLowerCase()));
       setFilteredCities(filtered);
       setShowCityDropdown(filtered.length > 0 && !filtered.includes(e.target.value));
       setShowProvinceDropdown(false);
@@ -236,6 +229,7 @@ function Form() {
   };
 
   useEffect(() => {
+    fetchCities();
     setTimeout(()=>{
       document.querySelector('.form__form').style.opacity = 1;
     }, 100)
@@ -301,7 +295,7 @@ function Form() {
                 placeholder="Cittá"
                 value={formData.city}
                 onChange={handleChange}
-                onFocus={() => setShowCityDropdown(!filteredCities.includes(formData.city))}
+                onFocus={() => setShowCityDropdown(formData.city === '' && !filteredCities.includes(formData.city))}
                 onClick={handleFormClick}
               />
               {showCityDropdown && (
@@ -359,7 +353,7 @@ function Form() {
               type="checkbox"
               onChange={handleCheckbox}
             />
-            <span>Iscrivendomi, accetto i <a href="">Termini di Servizio</a> e l&rsquo;<a href="">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
+            <span>Iscrivendomi, accetto i <a href="https://www.laurabiagiottiparfums.com/termini-duso/">Termini di Servizio</a> e l&rsquo;<a href="https://www.laurabiagiottiparfums.com/privacy-policy/">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
           </div>
           <div className="form__row checkbox">
             <span style={{color: 'red', fontSize: '14px'}}>{validationMsg}</span>

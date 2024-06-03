@@ -40,7 +40,7 @@ function MainBackground() {
         <img src={Logo} alt="Laura Biaggioti Logo" />
       </picture>
       <div className="button">
-        <PlayBtn text={'Play'} onClick={handlePlayClick} />
+        <PlayBtn text={'Gioca'} onClick={handlePlayClick} />
       </div>
     </div>
   );
