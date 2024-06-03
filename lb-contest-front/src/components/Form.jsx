@@ -42,6 +42,7 @@ function Form() {
     // timestamp: '',
   });
 
+  const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
   const [filteredProvinces, setFilteredProvinces] = useState(provinces);
   const [showCityDropdown, setShowCityDropdown] = useState(false);
@@ -54,7 +55,7 @@ function Form() {
       const response = await axios.post('https://countriesnow.space/api/v0.1/countries/cities', { country: "italy" });
       if (!response.data.error) {
         // console.log(response.data)
-        setFilteredCities(response.data.data)
+        setCities(response.data.data)
         // console.log(cities)
       }
     } catch (error) {
@@ -185,9 +186,9 @@ function Form() {
     }
 
     if (e.target.name === 'city') {
-      const filtered = filteredCities.filter(city => city.toLowerCase().includes(e.target.value.toLowerCase()));
+      const filtered = cities.filter(city => city.toLowerCase().includes(e.target.value.toLowerCase()));
       setFilteredCities(filtered);
-      setShowCityDropdown(filtered.length > 0 && !filtered.includes(e.target.value));
+      setShowCityDropdown(!filtered.includes(e.target.value));
       setShowProvinceDropdown(false);
     } else if (e.target.name === 'province') {
       const filtered = provinces.filter(province => province.toLowerCase().includes(e.target.value.toLowerCase()));
@@ -300,11 +301,15 @@ function Form() {
               />
               {showCityDropdown && (
                 <ul className="dropdown">
-                  {filteredCities.map((city, index) => (
+                  { filteredCities.length > 0 ? filteredCities.map((city, index) => (
                     <li key={index} onClick={() => handleCitySelect(city)}>
                       {city}
                     </li>
-                  ))}
+                  )) : cities.map((city, index) => (
+                    <li key={index} onClick={() => handleCitySelect(city)}>
+                      {city}
+                    </li>
+                  )) }
                 </ul>
               )}
               <input
@@ -353,7 +358,7 @@ function Form() {
               type="checkbox"
               onChange={handleCheckbox}
             />
-            <span>Iscrivendomi, accetto i <a href="https://www.laurabiagiottiparfums.com/termini-duso/">Termini di Servizio</a> e l&rsquo;<a href="https://www.laurabiagiottiparfums.com/privacy-policy/">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
+            <span>Iscrivendomi, accetto i <a target="_blank" href="https://www.laurabiagiottiparfums.com/termini-duso/">Termini di Servizio</a> e l&rsquo;<a target="_blank" href="https://www.laurabiagiottiparfums.com/privacy-policy/">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
           </div>
           <div className="form__row checkbox">
             <span style={{color: 'red', fontSize: '14px'}}>{validationMsg}</span>
