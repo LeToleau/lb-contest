@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 
 import Arrow from '../assets/img/Arrow.png';
 
+import GamePopUp from './GamePopUp';
+
 import Img1 from '../assets/img/Carciofo.png';
 import Img2 from '../assets/img/Rosa.png';
 import Img3 from '../assets/img/Peperone.png';
@@ -49,6 +51,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     
     function hideItems() {
       const slides = document.querySelectorAll('.bottom-bar__item-wrapper');
+      const popup = document.querySelector('.pop-up');
 
       slides.forEach((slide, index) => {
         if (visibleIngredients[index]) {
@@ -57,6 +60,23 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
           slide.classList.remove('hide');
         }
       });
+
+      setTimeout(() => {
+        popup.classList.add('show');
+
+      }, 2000)
+      
+      setTimeout(() => {
+        popup.style.opacity = 1;
+      }, 2500)
+
+      setTimeout(() => {
+        popup.style.opacity = 0;
+      }, 6000)
+
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 7000)
     }
     
     const scrollList = (direction, resize) => {
@@ -438,6 +458,7 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
   return (
     <div className="bottom-bar">
       <div className="bottom-bar__wrapper">
+        <GamePopUp message={`Trascina un elemento per abbinarlo all'essenza`} />
         <div className="bottom-bar__arrow left" onClick={() => scrollList(1)}><img src={Arrow} alt="Left Arrow" /></div>
         <ul className="bottom-bar__list" ref={ingredientsListRef}>
           {[Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9].map((img, index) => (
