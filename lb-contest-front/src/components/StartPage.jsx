@@ -60,7 +60,7 @@ function StartPage() {
       document.querySelector('.button').style.opacity = 0;
       
       setTimeout(() => {
-        navigate('/game')
+        navigate('/play')
       }, 200);
     };
 
@@ -72,6 +72,7 @@ function StartPage() {
             <picture className="start-page__logo">
                 <img src={Logo} alt="Laura Biaggioti Logo" />
             </picture>
+            <h1>INDOVINA LE NOTE E VINCI!</h1>
             <div className="start-page__grid">
               <Swiper modules={[Autoplay, Pagination]} className="mySwiper" spaceBetween={slides.spaceBetween} pagination={true} autoplay={{delay: 2000}}>
 
@@ -85,11 +86,11 @@ function StartPage() {
                 )}
               </Swiper>
             </div>
-            <div className="start-page__text">{'Abbina almeno due ingredienti per ogni fragranza e prova a vincere fantastici premi come un Eau de Toilette o una body lotion Aqve Romane o un fantastico weekend alle terme di Roma. Ad maiora!'}</div>
+            <div className="start-page__text">{'Partecipa e scopri subito se hai vinto, in palio: un Eau De Toilette Aqve Romane o una notte da sogno in una SPA QC Terme di Bormio, Monte Bianco, Roma, Garda o San Pellegrino!'}</div>
         </div>
         </div>
       <div className="button">
-        <PlayBtn text={'Gioca'} onClick={handlePlayClick} />
+        <PlayBtn text={'Continua'} onClick={handlePlayClick} />
       </div>
     </div>
   );

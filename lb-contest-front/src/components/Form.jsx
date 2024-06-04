@@ -230,7 +230,7 @@ function Form() {
     <div className="form" style={estiloDelDiv} onClick={handleFormClick}>
       <form className="form__form" onSubmit={handleSubmit}>
         <div className="form__wrapper">
-          <h1>Inserisci i tuoi dati e scopri se sei il vincitore</h1>
+          <h1>ULTIMO PASSO: <br/>COMPILA E SCOPRI SUBITO SE HAI VINTO!</h1>
           <div className="form__row">
             <input
               id="name"
