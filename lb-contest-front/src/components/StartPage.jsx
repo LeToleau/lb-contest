@@ -60,7 +60,7 @@ function StartPage() {
       document.querySelector('.button').style.opacity = 0;
       
       setTimeout(() => {
-        navigate('/play')
+        navigate('/game')
       }, 200);
     };
 
@@ -89,7 +89,7 @@ function StartPage() {
         </div>
         </div>
       <div className="button">
-        <PlayBtn text={'Continua'} onClick={handlePlayClick} />
+        <PlayBtn text={'Gioca'} onClick={handlePlayClick} />
       </div>
     </div>
   );
