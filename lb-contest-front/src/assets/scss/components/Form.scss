@@ -74,7 +74,7 @@
             font-weight: 500;
             line-height: 45px;
             margin-bottom: 24px;
-            max-width: 543px;
+            max-width: 741px;
 
             @media (max-width: 1024px) {
                 font-size: 28px;
@@ -111,11 +111,11 @@
         
         &:first-of-type {
             input {
-                @media (max-width: 768px) {
+                @media (max-width: 600px) {
                     max-width: 238px;
                 }
                 
-                @media (max-width: 500px) {
+                @media (max-width: 414px) {
                     max-width: 144px;
                 }
             }

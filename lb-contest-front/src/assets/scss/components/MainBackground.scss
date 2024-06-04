@@ -10,6 +10,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    gap: 24px;
 
     opacity: 0;
     transition: .3s;
@@ -30,11 +31,86 @@
         gap: 16vh;
     }
 
+    &__main {
+        background-color: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        padding: 12px;
+        border-radius: 5px;
+        max-width: 95%;
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1.5px solid #000000;
+        padding: 25px 70px 25px;
+
+        @media (max-width: 1080px) {
+            padding: 18px 42px 55px;
+        }
+
+        @media (max-width: 992px) {
+            padding: 3.9vh 3.5vw 5.5vh;
+        }
+
+        h1, p {
+            font-family: Augustea;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 45px;
+            margin-bottom: 2vh;
+            max-width: 543px;
+
+            @media (max-width: 1024px) {
+                font-size: 28px;
+                line-height: 40px;
+            }
+
+            /*@media (min-width: 769px) and (max-height: 735px) {
+                font-size: 52px;
+                line-height: 74px;
+            }
+            */
+
+            @media (max-width: 767px) {
+                font-size: 22px;
+                line-height: 28px;
+            }
+        }
+
+        p {
+            max-width: 940px;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 2.54vh;
+            -webkit-font-smoothing: antialiased;
+            text-align: center;
+            user-select: none;
+    
+            @media (max-height: 768px) {
+                font-size: 16px;
+                line-height: 22px;
+            }
+    
+            @media (max-width: 767px) {
+                font-size: 14px;
+                line-height: 20px;
+            }
+        }
+    }
+
     &__logo {
         position: relative;
         z-index: 2;
         max-width: 157px;
         max-height: 157px;
+        margin-bottom: 5vh;
 
         transform: translate(0px, -60px);
         opacity: 0;
