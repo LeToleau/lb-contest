@@ -86,7 +86,7 @@
 
         p {
             max-width: 940px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 500;
             line-height: 2.54vh;
             -webkit-font-smoothing: antialiased;
@@ -94,13 +94,13 @@
             user-select: none;
     
             @media (max-height: 768px) {
-                font-size: 16px;
-                line-height: 22px;
+                font-size: 12px;
+                line-height: 20px;
             }
     
             @media (max-width: 767px) {
-                font-size: 14px;
-                line-height: 20px;
+                font-size: 12px;
+                line-height: 18px;
             }
         }
     }
