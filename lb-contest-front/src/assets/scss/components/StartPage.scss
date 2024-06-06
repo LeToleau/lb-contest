@@ -270,11 +270,6 @@
         text-align: center;
         user-select: none;
 
-        @media (max-height: 1200px) {
-            font-size: 1.4vh;
-            line-height: 2.15vh;
-        }
-
         @media (max-height: 768px) {
             font-size: 12px;
             line-height: 20px;
