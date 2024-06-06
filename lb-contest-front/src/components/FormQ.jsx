@@ -352,7 +352,7 @@ function Form() {
               type="checkbox"
               onChange={handleCheckbox}
             />
-            <span>Iscrivendomi, accetto i <a target="_blank" href="https://www.laurabiagiottiparfums.com/termini-duso/">Termini di Servizio</a> e l&rsquo;<a target="_blank" href="https://www.laurabiagiottiparfums.com/privacy-policy/">Informativa sulla Privacy</a> di Laura Biagiotti.</span>
+            <span>Iscrivendomi, accetto il <a target="_blank" href="https://lb.figmenta.digital/wp-content/uploads/2024/06/REGOLAMENTO_ACQUE_ROMANE_def.pdf">Regolamento</a> e la <a target="_blank" href="https://lb.figmenta.digital/privacy-policy-2/">Privacy Policy</a> di Laura Biagiotti Parfums.</span>
           </div>
           <div className="form__row checkbox">
             <span style={{color: 'red', fontSize: '14px'}}>{validationMsg}</span>
