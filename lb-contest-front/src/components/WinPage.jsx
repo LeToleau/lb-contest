@@ -146,6 +146,7 @@ function WinPage() {
             <img src={version.img} alt="Prize Image" />
           </picture>
           <p>{version.text2}</p>
+          <span>Se vuoi contattarci puoi scrivere a <a href="mailto:info@laurabiagiottiparfums.com">info@laurabiagiottiparfums.com</a></span>
         </div>
       </div>
       <div className="button">

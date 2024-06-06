@@ -39,6 +39,7 @@ function Quasi() {
           <h1>C&rsquo;ERI QUASI!</h1>
           <h2>Non hai vinto</h2>
           <p>Riceverai notizie sulle future iniziative di Laura Biagiotti Parfums</p>
+          <span>Se vuoi contattarci puoi scrivere a <a href="mailto:info@laurabiagiottiparfums.com">info@laurabiagiottiparfums.com</a></span>
         </div>
       </div>
       <div className="button">
