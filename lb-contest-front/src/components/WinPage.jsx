@@ -95,8 +95,8 @@ function WinPage() {
         setVersion({
           cssClass: "version-1",
           bgd: Bgd,
-          text: "Hai vinto uno dei profumi di Aqve Romane",
-          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+          text: "Congratulazioni! Per te una fragranza Aqve Romane a sorpresa.",
+          text2: "Controlla la tua email per riscattare il premio.",
           img: Geles,
         });
         break;
@@ -104,8 +104,8 @@ function WinPage() {
         setVersion({
           cssClass: "version-1",
           bgd: Bgd,
-          text: "Hai Vinto una body lotion di Aqve Romane",
-          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+          text: "Congratulazioni! Hai vinto uno shower gel Aqve Romane in taglia da viaggio.",
+          text2: "Controlla la tua email per riscattare il premio.",
           img: Perfumes,
         });
         break;
@@ -113,8 +113,8 @@ function WinPage() {
         setVersion({
           cssClass: "version-2",
           bgd: Bgd2,
-          text: "Hai vinto un weekend alle acque termali di Roma",
-          text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+          text: "Congratulazioni! Per te un soggiorno di una notte con percorso benessere per due persone presso una struttura QC Terme.",
+          text2: "Potrai scegliere tra le seguenti destinazioni: QC Termegarda, QC Termeroma, QC Termemontebianco, QC Terme Bagni Vecchi e Bagni Nuovi, entrambi a Bormio. Controlla la tua email per riscattare il premio.",
         });
         break;
     }
@@ -140,7 +140,7 @@ function WinPage() {
     <div className={`win-page ${version.cssClass}`} style={estiloDelDiv}>
       <div className="win-page__card">
         <div className="win-page__text-wrapper">
-          <h1>PREMIO</h1>
+          <h1>HAI VINTO</h1>
           <h2>{version.text}</h2>
           <picture className="win-page__img">
             <img src={version.img} alt="Prize Image" />

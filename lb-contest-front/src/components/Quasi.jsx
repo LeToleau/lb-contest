@@ -38,7 +38,7 @@ function Quasi() {
         <div className="quasi__text-wrapper">
           <h1>C&rsquo;ERI QUASI!</h1>
           <h2>Non hai vinto</h2>
-          <p>Ti terremo aggiornato sulle future iniziative di Laura Biagiotti Parfums</p>
+          <p>Riceverai notizie sulle future iniziative di Laura Biagiotti Parfums</p>
         </div>
       </div>
       <div className="button">

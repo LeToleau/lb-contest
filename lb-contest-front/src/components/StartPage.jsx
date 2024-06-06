@@ -86,11 +86,11 @@ function StartPage() {
                 )}
               </Swiper>
             </div>
-            <div className="start-page__text">{'Partecipa e scopri subito se hai vinto, in palio: un Eau De Toilette Aqve Romane o una notte da sogno in una SPA QC Terme di Bormio, Monte Bianco, Roma, Garda o San Pellegrino!'}</div>
+            <div className="start-page__text">{'Partecipa e scopri subito se hai vinto. Questi sono i fantastici premi in palio: una delle nuove Eau de Toilette Aqve Romane, un gel doccia della stessa collezione o un ingresso con una notte da sogno in una SPA QC Terme!'}</div>
         </div>
         </div>
       <div className="button">
-        <PlayBtn text={'Continua'} onClick={handlePlayClick} />
+        <PlayBtn text={'PARTECIPARE'} onClick={handlePlayClick} />
       </div>
     </div>
   );

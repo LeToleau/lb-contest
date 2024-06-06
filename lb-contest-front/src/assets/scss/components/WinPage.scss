@@ -1,6 +1,6 @@
 .win-page {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
 
     background-repeat: no-repeat;
     background-size: cover;
@@ -60,12 +60,16 @@
 
                 h2 {
                     margin-bottom: 30px;
-                    max-width: 618px;
+                    max-width: 750px;
 
                     @media (max-width: 767px) {
                         max-width: 286px;
                         margin-bottom: 0;
                     }
+                }
+
+                p {
+                    font-size: 14px;
                 }
             }
         }
