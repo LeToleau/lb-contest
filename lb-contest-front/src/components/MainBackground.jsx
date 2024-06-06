@@ -46,7 +46,7 @@ function MainBackground() {
         </div>
       </div>
       <div className="button">
-        <PlayBtn text={'Gioca'} onClick={handlePlayClick} />
+        <PlayBtn text={'PARTECIPA'} onClick={handlePlayClick} />
       </div>
     </div>
   );

@@ -90,7 +90,7 @@ function StartPage() {
         </div>
         </div>
       <div className="button">
-        <PlayBtn text={'PARTECIPARE'} onClick={handlePlayClick} />
+        <PlayBtn text={'PARTECIPA'} onClick={handlePlayClick} />
       </div>
     </div>
   );
