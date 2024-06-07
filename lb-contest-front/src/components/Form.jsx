@@ -25,6 +25,8 @@ function Form() {
     uniqueId: ''
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [cities, setCities] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
@@ -54,6 +56,14 @@ function Form() {
     });
     setProvinces(listProvinces);
   }
+
+  useEffect(() => {
+    if (isLoading) {
+      document.querySelector('.form__row .play-button').classList.add('disabled');
+    } else {
+      document.querySelector('.form__row .play-button').classList.remove('disabled');
+    }
+  }, [isLoading]);
   
   async function handleSubmit(e) {
     e.preventDefault();
@@ -109,10 +119,13 @@ function Form() {
       };
 
       setValidationMsg(validationMessages.valid);
+
+      setIsLoading(true);
       
       try {
-
         const response = await axios.post('https://lbcontest.it/admin-access/api/participants', updatedFormData);
+        setIsLoading(false);
+
         if (response.status === 201) {
           console.log('Participante agregado con éxito:', response.data);
           // Reiniciar el estado del formulario después de enviar los datos
@@ -146,6 +159,7 @@ function Form() {
           console.error('Error al agregar participante', response.data);
         }
       } catch (error) {
+        setIsLoading(false);
         console.error('Error al enviar la solicitud', error);
       }
     }  else {
@@ -370,6 +384,7 @@ function Form() {
             <PlayBtn text={'Invia'} onClick={handleSubmit} />
           </div>
         </div>
+        {isLoading && <div className="loader"></div>}
       </form>
     </div>
   );
