@@ -43,7 +43,7 @@ function StartPage() {
         setSlides({ slidesPerView: 1, initialSlide: 2, pagination: true, spaceBetween: 0 })
       }
 
-      console.log(`H: ${window.innerHeight}`, `W: ${window.innerWidth}`)
+      // console.log(`H: ${window.innerHeight}`, `W: ${window.innerWidth}`)
 
       setTimeout(()=>{
         document.querySelector('.start-page__logo').style.transform = `translate(0px, 0px)`;

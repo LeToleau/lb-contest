@@ -7,11 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import '../assets/scss/components/WinPage.scss';
 import axios from 'axios';
+import { useUniqueId } from '../contexts/UniqueIdContext';
 
 // Componente que muestra la imagen de fondo y el botón de play
 
 function WinPage() {
   const navigate = useNavigate();
+  const { uniqueId } = useUniqueId();
+
   const [version, setVersion] = useState({
     cssClass: "",
     bgd: "",
@@ -25,18 +28,7 @@ function WinPage() {
       backgroundImage: `url(${version.bgd})`,
   };
 
-  function formatTimestamp(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  }
-
-  /*
+  
   const fetchPrize = async (url) => {
     try {
       const response = await axios.get(url);
@@ -79,14 +71,13 @@ function WinPage() {
       console.log(error.message);
     }
   };
-  */
+
 
   useEffect(() => {
-    /*
-    const date = new Date();
+    fetchPrize(`https://lbcontest.it/admin-access/api/winners/${uniqueId}`);
 
-    fetchPrize(`http://localhost:3000/api/winners/${formatTimestamp(date)}`);
-    */
+    /*
+
 
     const result = Math.floor(Math.random() * 3) + 1;
 
@@ -118,6 +109,7 @@ function WinPage() {
         });
         break;
     }
+    */
 
     setTimeout(()=>{
       document.querySelector('.win-page').style.opacity = 1;

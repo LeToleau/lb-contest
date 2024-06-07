@@ -6,6 +6,8 @@ import axios from 'axios';
 import '../assets/scss/components/Form.scss';
 import dataCities from '../../gi_comuni.json';
 import dataProvinces from '../../gi_province.json';
+import { v4 as uuidv4 } from 'uuid';
+import { useUniqueId } from '../contexts/UniqueIdContext';
 
 function Form() {
   const [validationMsg, setValidationMsg] = useState('');
@@ -20,7 +22,7 @@ function Form() {
     province: '',
     address: '',
     termsConditions: false,
-    // timestamp: '',
+    uniqueId: ''
   });
 
   const [cities, setCities] = useState([]);
@@ -29,6 +31,8 @@ function Form() {
   const [filteredProvinces, setFilteredProvinces] = useState();
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [showProvinceDropdown, setShowProvinceDropdown] = useState(false);
+
+  const { setUniqueId } = useUniqueId();
 
   const navigate = useNavigate();
 
@@ -51,17 +55,18 @@ function Form() {
     setProvinces(listProvinces);
   }
   
-  /*async*/ function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    /*
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      timestamp: new Date().toISOString(),
-    }));
-    */
+    const isValidated = Object.entries(formData).some(([key, value]) => {
+      // Excluir la propiedad 'uniqueId' del proceso de validación
+      if (key === 'uniqueId') {
+        return false;
+      }
+      // Realizar la validación para otras propiedades que no sean 'uniqueId'
+      return value === '';
+    });
 
-    const isValidated = Object.values(formData).some(value => value === '');
     let validations = !isValidated;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -93,16 +98,21 @@ function Form() {
 
    const conditionKey = Object.keys(conditions).find(key => conditions[key]);
     
-    if (conditionKey === 'valid') {
+   if (conditionKey === 'valid') {
+      const id = uuidv4();
+      setUniqueId(id);
+
+      // Crear una copia del formData con el uniqueId
+      const updatedFormData = {
+        ...formData,
+        uniqueId: id
+      };
+
       setValidationMsg(validationMessages.valid);
-
-      setTimeout(() => {
-        navigate('/quasi');
-      }, 300);
-
-      /*
+      
       try {
-        const response = await axios.post('http://localhost:3000/api/participants', formData);
+
+        const response = await axios.post('https://lbcontest.it/admin-access/api/participants', updatedFormData);
         if (response.status === 201) {
           console.log('Participante agregado con éxito:', response.data);
           // Reiniciar el estado del formulario después de enviar los datos
@@ -119,6 +129,7 @@ function Form() {
               province: '',
               address: '',
               termsConditions: false,
+              uniqueId: '',
             });
 
             setTimeout(() => {
@@ -127,7 +138,7 @@ function Form() {
               } else {
                 navigate('/quasi');
               }
-            }, 200);
+            }, 500);
           } else {
             setValidationMsg('Participant Already Registered');
           }
@@ -137,7 +148,6 @@ function Form() {
       } catch (error) {
         console.error('Error al enviar la solicitud', error);
       }
-      */
     }  else {
       setValidationMsg(validationMessages[conditionKey]);
     }
@@ -218,7 +228,6 @@ function Form() {
   };
 
   useEffect(() => {
-    //fetchCities();
     getCities();
     getProvinces();
     setTimeout(()=>{

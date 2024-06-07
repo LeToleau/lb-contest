@@ -9,23 +9,24 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
 import './assets/scss/utils/fonts.scss';
 import StartPage from './components/StartPage';
+import { UniqueIdProvider } from './contexts/UniqueIdContext';
 
 function App() {
-  // const [count, setCount] = useState(0);
-
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={<StartPage/>} />
-          <Route exact path="/play" element={<MainBackground/>} />
-          <Route path="/game" element={<Game/>} />
-          <Route path="/win-page" element={<WinPage/>} />
-          <Route path="/quasi" element={<Quasi/>} />
-          <Route path="/contest-form" element={<Form/>} />
-          <Route path="/form" element={<FormQ/>} />
-        </Routes>
-      </Router>
+      <UniqueIdProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<StartPage/>} />
+            <Route exact path="/play" element={<MainBackground/>} />
+            <Route path="/game" element={<Game/>} />
+            <Route path="/win-page" element={<WinPage/>} />
+            <Route path="/quasi" element={<Quasi/>} />
+            <Route path="/contest-form" element={<Form/>} />
+            <Route path="/form" element={<FormQ/>} />
+          </Routes>
+        </Router>
+      </UniqueIdProvider>
     </div>
   )
 }
