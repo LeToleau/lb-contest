@@ -42,7 +42,7 @@ function MainBackground() {
             <img src={Logo} alt="Laura Biaggioti Logo" />
           </picture>
           <h1>{'Come Giocare'}</h1>
-          <p>{'Indovina le note olfattive che pensi appartengano a ciascuna fragranza, trascinandole sulle bottiglie. Troverai nove materie prime e ne dovrai associare correttamente almeno due per ogni flacone. Inserisci poi i dati richiesti per scoprire subito se hai vinto.'}</p>
+          <p>{'Trascina gli elementi delle note olfattive che appartengono a ciascuna fragranza nel flacone. Se avrai indovinato almeno due elementi per fragranza ti basterà inserire i dati richiesti per scoprire subito se hai vinto... AD MAIORA!'}</p>
         </div>
       </div>
       <div className="button">

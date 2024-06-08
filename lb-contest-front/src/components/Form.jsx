@@ -8,9 +8,12 @@ import dataCities from '../../gi_comuni.json';
 import dataProvinces from '../../gi_province.json';
 import { v4 as uuidv4 } from 'uuid';
 import { useUniqueId } from '../contexts/UniqueIdContext';
+import { useGameStatus } from '../contexts/GameStatusContext';
 
 function Form() {
   const [validationMsg, setValidationMsg] = useState('');
+  const { gameStatus } = useGameStatus();
+
   const [formData, setFormData] = useState({
     name: '',
     lastname: '',
@@ -22,7 +25,9 @@ function Form() {
     province: '',
     address: '',
     termsConditions: false,
-    uniqueId: ''
+    commercial: false,
+    uniqueId: '',
+    wonGame: gameStatus,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -89,12 +94,13 @@ function Form() {
     const validTaxCode = taxCodeRegex.test(formData.taxCode);
 
     const conditions = {
-    valid: validations && formData.termsConditions && validMail && validPostalCode && validTaxCode,
+    valid: validations && formData.termsConditions && formData.commercial && validMail && validPostalCode && validTaxCode,
     incompleteForm: !validations,
     invalidEmail: /*validations && formData.termsConditions && */ !validMail /*&& validPostalCode && validTaxCode*/,
     invalidTaxCode: /*validations && formData.termsConditions && validMail && validPostalCode &&*/ !validTaxCode,
     invalidPostalCode: /*validations && formData.termsConditions && validMail &&*/ !validPostalCode /*&& validTaxCode*/,
     termsNotAccepted: /*validations &&*/ !formData.termsConditions /*&& validMail && validPostalCode && validTaxCode*/,
+    commercialNotAccepted: /*validations &&*/ !formData.commercial /*&& validMail && validPostalCode && validTaxCode*/,
     };
 
     const validationMessages = {
@@ -104,6 +110,7 @@ function Form() {
     invalidTaxCode: `*Il formato del codice fiscale non è corretto, inseriscilo correttamente`,
     invalidPostalCode: `*Il formato del CAP non è corretto, deve contenere esattamente 5 cifre`,
     termsNotAccepted: `*Per continuare è necessario accettare i Termini e Condizioni`,
+    commercialNotAccepted: `*Per proseguire è necessario accettare il consenso`,
     };
 
    const conditionKey = Object.keys(conditions).find(key => conditions[key]);
@@ -142,7 +149,9 @@ function Form() {
               province: '',
               address: '',
               termsConditions: false,
+              commercial: false,
               uniqueId: '',
+              wonGame: gameStatus
             });
 
             setTimeout(() => {
@@ -172,6 +181,15 @@ function Form() {
       {
         ...formData,
         termsConditions: !formData.termsConditions
+      }
+    );
+  }
+
+  function handleCheckbox2() {
+    setFormData(
+      {
+        ...formData,
+        commercial: !formData.commercial
       }
     );
   }
@@ -253,7 +271,7 @@ function Form() {
     <div className="form" style={estiloDelDiv} onClick={handleFormClick}>
       <form className="form__form" onSubmit={handleSubmit}>
         <div className="form__wrapper">
-          <h1>ULTIMO PASSO: <br/>COMPILA E SCOPRI SUBITO SE HAI VINTO!</h1>
+          <h1>ULTIMO PASSO: COMPILA E SCOPRI SUBITO SE HAI VINTO!</h1>
           <div className="form__row">
             <input
               id="name"
@@ -375,14 +393,24 @@ function Form() {
               type="checkbox"
               onChange={handleCheckbox}
             />
-            <span>Iscrivendomi, accetto il <a target="_blank" href="https://lb.figmenta.digital/wp-content/uploads/2024/06/REGOLAMENTO_ACQUE_ROMANE_def.pdf">Regolamento</a> e la <a target="_blank" href="https://lb.figmenta.digital/privacy-policy-2/">Privacy Policy</a> di Laura Biagiotti Parfums.</span>
+            <span>Iscrivendomi, accetto il regolamento e dichiaro di aver letto e compreso l&lsquo;<a target="_blank" href="https://laurabiagiottiparfums.com/privacy-policy-2">informativa privacy</a> resa da Angelini Beauty S.p.A.</span>
           </div>
           <div className="form__row checkbox">
-            <span style={{color: 'red', fontSize: '14px'}}>{validationMsg}</span>
+            <input
+              id="commercial"
+              name="commercial"
+              type="checkbox"
+              onChange={handleCheckbox2}
+            />
+            <span>Acconsento alla ricezione di comunicazioni commerciali su novità relative a prodotti, promozioni e iniziative di Angelini Beauty S.p.A., delle proprie affiliate e distributori.</span>
+          </div>
+          <div className="form__row validation-msg">
+            <span style={{color: 'red', fontSize: '14px', marginBottom: 0}}>{validationMsg}</span>
           </div>
           <div className="form__row submit-button">
             <PlayBtn text={'Invia'} onClick={handleSubmit} />
           </div>
+          <span>Se vuoi contattarci puoi scrivere a <a href="mailto:info@laurabiagiottiparfums.com">info@laurabiagiottiparfums.com</a></span>
         </div>
         {isLoading && <div className="loader"></div>}
       </form>

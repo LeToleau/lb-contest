@@ -22,6 +22,7 @@ import Tick from '../assets/img/tick.svg';
 import Cross from '../assets/img/cross.svg';
 
 import '../assets/scss/components/BottomBar.scss';
+import { useGameStatus } from '../contexts/GameStatusContext';
 
 function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     // ref to avoid warning
@@ -39,6 +40,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
 
     // items for transition
     const [ingredients, setIngredients] = useState([]);
+
+    const { setGameStatus } = useGameStatus();
 
     // navigation tool
     const history = useNavigate();
@@ -255,10 +258,11 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
 
             setTimeout(() => {
               if (score >= 6) {
-                history('/contest-form');
+                setGameStatus(true)
               } else {
-                history('/form');
+                setGameStatus(false)
               }
+              history('/contest-form');
             },1200);
         }
     }, [allDraggableDisabled, history]);

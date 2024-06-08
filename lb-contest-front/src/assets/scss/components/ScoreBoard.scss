@@ -4,6 +4,10 @@
     padding: 6px;
     border-radius: 5px;
 
+    @media (max-width: 767px) {
+        margin: 0 auto;
+    }
+
     span {
         font-family: Augustea;
         font-size: 28px;
@@ -13,5 +17,9 @@
         display: flex;
         cursor:default;
         user-select: none;
+
+        @media (max-width: 767px) {
+            font-size: 20px;
+        }
     }
 }
