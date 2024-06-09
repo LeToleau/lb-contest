@@ -18,7 +18,7 @@ function App() {
       <GameStatusProvider>
         <UniqueIdProvider>
           <Router>
-            {<GTMConversion />}
+            <GTMConversion />
             <Routes>
               <Route path="/" element={<StartPage/>} />
               <Route exact path="/play" element={<MainBackground/>} />

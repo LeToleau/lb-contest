@@ -127,7 +127,7 @@ function Form() {
       setIsLoading(true);
       
       try {
-        const response = await axios.post('https://lbcontest.it/admin-access/api/participants', updatedFormData);
+        const response = await axios.post('http://localhost:3000/api/participants', updatedFormData);
         setIsLoading(false);
 
         if (response.status === 201) {

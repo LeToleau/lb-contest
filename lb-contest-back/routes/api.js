@@ -2,11 +2,24 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../models/dbConnection');
 const nodemailer = require('nodemailer');
+const { JSDOM } = require('jsdom');
+const createDOMPurify = require('dompurify');
 
-//const date = "2024-07-01";
+const prizeFrequency = {
+    prize1: 5,
+    prize2: 5,
+    prize3: 5
+};
+
+const date = "2024-06-10";
 
 const MAX_DAYS = 21;
-var availablePrizes = []
+var availablePrizes = [];
+let isInitializing = false;
+
+// Crear instancia de DOMPurify
+const window = (new JSDOM('')).window;
+const DOMPurify = createDOMPurify(window);
 
 const transporter = nodemailer.createTransport({
     host: 'mail.lbcontest.it',
@@ -19,7 +32,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const getWeekOfYear = () => {
-    const today = new Date();
+    const today = new Date(date);
     const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
     const pastDaysOfYear = (today - firstDayOfYear) / 86400000;
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay()) / 7);
@@ -30,11 +43,11 @@ const getPrizes = async () => {
         const week = getWeekOfYear();
         const rows = await pool.query('SELECT prize FROM lb_contest_available_prizes WHERE week = ?', [week]);
         const prizesFromDB = [];
-        rows.forEach(row => {
-            prizesFromDB.push(row.prize);
-        });
-        console.log('rows', rows, 'prizes from db', prizesFromDB);
+
         if (rows.length > 0) {
+            rows.forEach(row => {
+                prizesFromDB.push(row.prize);
+            });
             return prizesFromDB;
         } else {
             return [];
@@ -44,22 +57,9 @@ const getPrizes = async () => {
     }
 }
 
-
-
-const prizeFrequency = {
-    /*
-    prize1: 1,
-    prize2: 20,
-    prize3: 100
-    */
-    prize1: 5,
-    prize2: 5,
-    prize3: 5
-};
-
 const saveInitializationDate = async () => {
     const currentWeek = getWeekOfYear();
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date(date).toISOString().split('T')[0];
 
     try {
         // Elimina cualquier registro previo de la misma semana
@@ -72,70 +72,93 @@ const saveInitializationDate = async () => {
 };
 
 const initializeAvailablePrizes = async () => {
+    if (isInitializing) return;
+    isInitializing = true;
+    let newWeek = false;
+
     const currentWeek = getWeekOfYear();
-    // Verifica si la semana actual ya ha sido inicializada
+    
     try {        
         const [rows] = await pool.query('SELECT initialization_date FROM lb_contest_initialization WHERE week = ?', [currentWeek]);
+        
+        // Verifica si la semana actual ya ha sido inicializada
         const initializationRows = rows ? JSON.parse(JSON.stringify(rows)) : [];
+        if (initializationRows.length > 0 && initializationRows[0].initialization_date) {
+            console.log(`Week ${currentWeek} already initialized on ${initializationRows[0].initialization_date}`);
+            isInitializing = false;
+            // availablePrizes = await getPrizes();
+            return;
+        } else {
+            console.log('entered else')
+            const firstInit = await getPrizes();
+            const prizeCount = { prize1: 0, prize2: 0, prize3: 0 };
+            //console.log(firstInit.length);
+            if (firstInit.length === 0) {
+                availablePrizes = [];
+                for (let prize in prizeFrequency) {
+                    const remaining = Math.max(0, prizeFrequency[prize]);
+                    for (let i = 0; i < remaining; i++) {
+                        availablePrizes.push(prize);
+                    }
+                }
+            
+                const remainingSlots = Math.max(0, 15 - Object.values(prizeCount).reduce((acc, cur) => acc + cur, 0));
+                console.log(remainingSlots);
+                for (let i = 0; i < remainingSlots; i++) {
+                    availablePrizes.push('no prize');
+                }
+            
+                shuffleArray(availablePrizes);
+            }
 
-        if (initializationRows.initialization_date) {
-            console.log(`Week ${currentWeek} already initialized on ${initializationRows.initialization_date}`);
-            availablePrizes = await getPrizes();
-            return; // No inicializa nuevamente si ya ha sido inicializada esta semana
+            await saveInitializationDate();
+            await saveAvailablePrizesToDB();
+
+            isInitializing = false;
         }
-    
+        
         // Verifica si han pasado más de MAX_DAYS dias desde la primera inicialización
         const [rows2] = await pool.query('SELECT MIN(initialization_date) as first_initialization_date FROM lb_contest_initialization');
         const firstInitializationRows = rows2 ? JSON.parse(JSON.stringify(rows2)) : [];
-
-        if (firstInitializationRows.first_initialization_date) {
+        console.log('aqui empieza')
+        console.log('Line 96', firstInitializationRows)
+        console.log('FIR: ', firstInitializationRows[0].first_initialization_date)
+        console.log('FIR: ', firstInitializationRows, 'length: ',firstInitializationRows.length, 'condition1: ',firstInitializationRows.length > 0, 'condition2: ',firstInitializationRows[0].first_initialization_date);
+        
+        if (firstInitializationRows.length > 0 && firstInitializationRows[0].first_initialization_date) {
             const firstInitializationDate = new Date(firstInitializationRows.first_initialization_date);
-            const today = new Date();
+            const today = new Date(date);
             const diffDays = Math.floor((today - firstInitializationDate) / (24 * 60 * 60 * 1000));
             if (diffDays >= (MAX_DAYS - 1)) {
                 console.log(`More than ${MAX_DAYS - 1} days since first initialization`);
-                return; // No inicializa si han pasado más de MAX_DAYS dias
+                isInitializing = false;
+                return;
             }
+            console.log('diffDays Condition: ', diffDays >= (MAX_DAYS - 1),'diffDays: ', diffDays,'max days -1: ', MAX_DAYS - 1);
         }
     } catch (error) {
+        isInitializing = false;
         console.log(error, error.message);
     }
-    
-    const prizeCount = { prize1: 0, prize2: 0, prize3: 0 };
-
-    for (let prize in prizeFrequency) {
-        const remaining = Math.max(0, prizeFrequency[prize]);
-        for (let i = 0; i < remaining; i++) {
-            availablePrizes.push(prize);
-        }
-    }
-
-    const remainingSlots = Math.max(0, 15 - Object.values(prizeCount).reduce((acc, cur) => acc + cur, 0));
-    for (let i = 0; i < remainingSlots; i++) {
-        availablePrizes.push('no prize');
-    }
-
-    shuffleArray(availablePrizes);
-    await saveAvailablePrizesToDB();
-    await saveInitializationDate();
 };
 
 const saveAvailablePrizesToDB = async () => {
     const currentWeek = getWeekOfYear();
     
     try {
+        console.log('entered try on save to db')
         const [rows] = await pool.query('SELECT initialization_date FROM lb_contest_initialization WHERE week < ?', [currentWeek]);
         const initializationRows = rows ? JSON.parse(JSON.stringify(rows)) : [];
         if (initializationRows.initialization_date) {
             await pool.query('DELETE FROM lb_contest_available_prizes WHERE week < ?', [currentWeek]);
             console.log(`deleted old weeks prizes`);
         }
-        console.log('se borraron')
     } catch (error) {
         console.log(error, error.message);
     }
 
-    // console.log(availablePrizes);
+    console.log('try eliminates this')
+    console.log('cant avail prizes: ', availablePrizes.length);
     for (let prize of availablePrizes) {
         await pool.query('INSERT INTO lb_contest_available_prizes (prize, week) VALUES (?, ?)', [prize, currentWeek]);
     }
@@ -143,12 +166,17 @@ const saveAvailablePrizesToDB = async () => {
 };
 
 const getRandomPrize = async () => {
-
+    console.log('availablePrizes.length linea 162 getRandomPrize: ', availablePrizes.length)
+    const firstInit = await getPrizes();
+    if (firstInit.length === 0) {
         await initializeAvailablePrizes();
+    }
 
     try {
-        if (availablePrizes.length > 0) {
-            const prize = availablePrizes.shift();
+        if (firstInit.length > 0) {
+            console.log('geting prize...');
+            const prize = firstInit.shift();
+            console.log(prize)
             await pool.query('DELETE FROM lb_contest_available_prizes WHERE prize = ? LIMIT 1', [prize]);
             return prize;
         } else {
@@ -169,7 +197,7 @@ const shuffleArray = (array) => {
 
 const sendPrizeEmail = async (email, prize, code, image) => {
     const mailOptions = {
-        from: 'no-reply@lbcontest.it',
+        from: 'no-reply@laurabiagiottiparfums.com',
         to: email,
         subject: 'Congratulazioni! Hai vinto un premio con Laura Biaggioti Parfums',
         html: `
@@ -240,12 +268,26 @@ const generatePrizeCode = (prize) => {
 */
 
 router.post('/participants', async (req, res) => {
-    const { name, lastname, phone, mail, taxCode, city, postCode, province, address, termsConditions, uniqueId, wonGame } = req.body;
-    const queryCheck = 'SELECT COUNT(*) as count FROM lb_contest_participants WHERE tax_code = ?';
-
     try {
+        //const { name, lastname, phone, mail, taxCode, city, postCode, province, address, termsConditions, uniqueId, wonGame } = req.body;
+        const name = DOMPurify.sanitize(req.body.name);
+        const lastname =  DOMPurify.sanitize(req.body.lastname);
+        const phone= DOMPurify.sanitize(req.body.phone);
+        const mail = DOMPurify.sanitize(req.body.mail);
+        const taxCode = DOMPurify.sanitize(req.body.taxCode);
+        const city = DOMPurify.sanitize(req.body.city);
+        const postCode = DOMPurify.sanitize(req.body.postCode);
+        const province = DOMPurify.sanitize(req.body.province);
+        const address = DOMPurify.sanitize(req.body.address);
+        const termsConditions = DOMPurify.sanitize(req.body.termsConditions);
+        const uniqueId = DOMPurify.sanitize(req.body.uniqueId);
+        const wonGame = DOMPurify.sanitize(req.body.wonGame);
+        
+        const queryCheck = 'SELECT COUNT(*) as count FROM lb_contest_participants WHERE tax_code = ?';
+
         const [checkResult] = await pool.query(queryCheck, [taxCode]);
-        const isRegistered = checkResult.count > 0;
+        const isRegistered = checkResult.count > 0;        
+        let consoleMsg = '';
 
         if (!isRegistered) {
             const prize = wonGame ? await getRandomPrize() : 'no prize';
@@ -279,17 +321,15 @@ router.post('/participants', async (req, res) => {
                         imgUrl = 'shower-gel';
                         break
                 }
-                
-                console.log(imgUrl);
 
                 await sendPrizeEmail(mail, message, uniqueId, imgUrl);
             }
 
-            message = 'Participant Registered Successfully';
-            res.status(201).json({ message: message, registered: isRegistered, prize: prize });
+            consoleMsg = 'Participant Registered Successfully';
+            res.status(201).json({ message: consoleMsg, registered: isRegistered, prize: prize });
         } else {
-            message = 'Participant Already Registered';
-            res.status(201).json({ message: message, registered: isRegistered });
+            consoleMsg = 'Participant Already Registered';
+            res.status(201).json({ message: consoleMsg, registered: isRegistered });
         }
     } catch (err) {
         console.error('Error registering participant:', err);

@@ -72,7 +72,7 @@ function WinPage() {
 
 
   useEffect(() => {
-    fetchPrize(`https://lbcontest.it/admin-access/api/winners/${uniqueId}`);
+    fetchPrize(`http://localhost:3000/api/winners/${uniqueId}`);
 
     setTimeout(()=>{
       document.querySelector('.win-page').style.opacity = 1;
