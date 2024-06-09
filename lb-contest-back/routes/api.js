@@ -6,8 +6,6 @@ const nodemailer = require('nodemailer');
 //const date = "2024-07-01";
 
 const MAX_DAYS = 21;
-
-let currentDate = null;
 var availablePrizes = []
 
 const transporter = nodemailer.createTransport({
@@ -24,7 +22,6 @@ const getWeekOfYear = () => {
     const today = new Date();
     const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
     const pastDaysOfYear = (today - firstDayOfYear) / 86400000;
-    // console.log(today, firstDayOfYear, pastDaysOfYear, Math.ceil((pastDaysOfYear + firstDayOfYear.getDay()) / 7))
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay()) / 7);
 };
 
@@ -95,7 +92,6 @@ const initializeAvailablePrizes = async () => {
             const firstInitializationDate = new Date(firstInitializationRows.first_initialization_date);
             const today = new Date();
             const diffDays = Math.floor((today - firstInitializationDate) / (24 * 60 * 60 * 1000));
-            // console.log('diffDays:', diffDays);
             if (diffDays >= (MAX_DAYS - 1)) {
                 console.log(`More than ${MAX_DAYS - 1} days since first initialization`);
                 return; // No inicializa si han pasado más de MAX_DAYS dias
@@ -107,7 +103,6 @@ const initializeAvailablePrizes = async () => {
     
     const prizeCount = { prize1: 0, prize2: 0, prize3: 0 };
 
-    // console.log(availablePrizes);
     for (let prize in prizeFrequency) {
         const remaining = Math.max(0, prizeFrequency[prize]);
         for (let i = 0; i < remaining; i++) {
@@ -121,7 +116,6 @@ const initializeAvailablePrizes = async () => {
     }
 
     shuffleArray(availablePrizes);
-    // console.log(availablePrizes);
     await saveAvailablePrizesToDB();
     await saveInitializationDate();
 };
@@ -149,17 +143,11 @@ const saveAvailablePrizesToDB = async () => {
 };
 
 const getRandomPrize = async () => {
-    /*const today = new Date(date).toISOString().split('T')[0];
-    if (currentDate !== today || availablePrizes.length === 0) {*/
-        //currentDate = today;
+
         await initializeAvailablePrizes();
-    //}
 
     try {
-        console.log(availablePrizes);
-        //console.log(availablePrizes);
         if (availablePrizes.length > 0) {
-            // console.log(availablePrizes);
             const prize = availablePrizes.shift();
             await pool.query('DELETE FROM lb_contest_available_prizes WHERE prize = ? LIMIT 1', [prize]);
             return prize;
@@ -179,11 +167,11 @@ const shuffleArray = (array) => {
     }
 };
 
-const sendPrizeEmail = async (email, prize, code) => {
+const sendPrizeEmail = async (email, prize, code, image) => {
     const mailOptions = {
         from: 'no-reply@lbcontest.it',
         to: email,
-        subject: '¡Felicitaciones! Has ganado un premio',
+        subject: 'Congratulazioni! Hai vinto un premio con Laura Biaggioti Parfums',
         html: `
         <div id="mail" style="background-color: #fff5ef;color: #303133;width: 600px;margin: 0 auto;font-family: Arial, Helvetica, sans-serif;">
             <div id="mail-heading">
@@ -244,22 +232,23 @@ const sendPrizeEmail = async (email, prize, code) => {
 };
 
 // Función para generar un código de premio
+/*
 const generatePrizeCode = (prize) => {
     // Genera un código único basado en el premio
     return prize + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 };
+*/
 
 router.post('/participants', async (req, res) => {
-    const { name, lastname, phone, mail, taxCode, city, postCode, province, address, termsConditions, uniqueId } = req.body;
+    const { name, lastname, phone, mail, taxCode, city, postCode, province, address, termsConditions, uniqueId, wonGame } = req.body;
     const queryCheck = 'SELECT COUNT(*) as count FROM lb_contest_participants WHERE tax_code = ?';
 
     try {
         const [checkResult] = await pool.query(queryCheck, [taxCode]);
         const isRegistered = checkResult.count > 0;
-        let message = '';
 
         if (!isRegistered) {
-            const prize = await getRandomPrize();
+            const prize = wonGame ? await getRandomPrize() : 'no prize';
             const query = `
                 INSERT INTO lb_contest_participants (name, lastname, phone, mail, tax_code, city, postal_code, province, address, prize, unique_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -268,12 +257,32 @@ router.post('/participants', async (req, res) => {
             const participantId = result.insertId;
 
             if (prize !== 'no prize') {
-                const code = generatePrizeCode(prize); // Función para generar un código de premio
+                //const code = generatePrizeCode(prize); // Función para generar un código de premio
                 await pool.query(
                     'INSERT INTO lb_contest_winners (participant_id, name, lastname, phone, email, tax_code, city, postal_code, province, address, prize, unique_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
                     [participantId, name, lastname, phone, mail, taxCode, city, postCode, province, address, prize, uniqueId]
                 );
-                await sendPrizeEmail(mail, prize, code); // Enviar correo electrónico
+                let message;
+                let imgUrl;
+
+                switch (prize) {
+                    case 'prize1':
+                        message = 'UN <strong>soggiorno di 1 notte per due persone con percorso benessere in una struttura a scelta tra QC Terme Garda, QC Terme Roma, QC Terme Monte Bianco, QC Terme Bagni Vecchi e Bagni Nuovi, entrambi a Bormio.</strong>';
+                        imgUrl = 'acque-termali';
+                        break;
+                    case 'prize2':
+                        message = 'UNA <strong>Eau De Toilette Aqve Romane</strong>';
+                        imgUrl = 'eau-de-toilete';
+                        break;
+                    case 'prize3':
+                        message = 'UN <strong>Shower Gel travel size Aqve Romane</strong>';
+                        imgUrl = 'shower-gel';
+                        break
+                }
+                
+                console.log(imgUrl);
+
+                await sendPrizeEmail(mail, message, uniqueId, imgUrl);
             }
 
             message = 'Participant Registered Successfully';

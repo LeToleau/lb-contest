@@ -6,9 +6,9 @@ import axios from 'axios';
 import '../assets/scss/components/Form.scss';
 import dataCities from '../../gi_comuni.json';
 import dataProvinces from '../../gi_province.json';
-import { v4 as uuidv4 } from 'uuid';
 import { useUniqueId } from '../contexts/UniqueIdContext';
 import { useGameStatus } from '../contexts/GameStatusContext';
+import ShortUniqueId from 'short-unique-id';
 
 function Form() {
   const [validationMsg, setValidationMsg] = useState('');
@@ -45,9 +45,7 @@ function Form() {
 
   function getCities() {
     const listCities = [];
-    // console.log(allCities);
     dataCities.forEach(city => {
-      // console.log(city)
       listCities.push(city.denominazione_ita);
     });
     setCities(listCities);
@@ -56,7 +54,6 @@ function Form() {
   function getProvinces() {
     const listProvinces = [];
     dataProvinces.forEach(province => {
-      //console.log(province)
       listProvinces.push(province.denominazione_provincia);
     });
     setProvinces(listProvinces);
@@ -116,13 +113,13 @@ function Form() {
    const conditionKey = Object.keys(conditions).find(key => conditions[key]);
     
    if (conditionKey === 'valid') {
-      const id = uuidv4();
-      setUniqueId(id);
+      const id = new ShortUniqueId({ length: 16 });
+      const rndId = id.rnd();
+      setUniqueId(rndId);
 
-      // Crear una copia del formData con el uniqueId
       const updatedFormData = {
         ...formData,
-        uniqueId: id
+        uniqueId: rndId
       };
 
       setValidationMsg(validationMessages.valid);
@@ -134,7 +131,7 @@ function Form() {
         setIsLoading(false);
 
         if (response.status === 201) {
-          console.log('Participante agregado con éxito:', response.data);
+          console.log('Participante agregado con éxito');
           // Reiniciar el estado del formulario después de enviar los datos
 
           if (!response.data.registered) {
@@ -393,7 +390,7 @@ function Form() {
               type="checkbox"
               onChange={handleCheckbox}
             />
-            <span>Iscrivendomi, accetto il regolamento e dichiaro di aver letto e compreso l&lsquo;<a target="_blank" href="https://laurabiagiottiparfums.com/privacy-policy-2">informativa privacy</a> resa da Angelini Beauty S.p.A.</span>
+            <span>Iscrivendomi, accetto il <a target="_blank" href="https://laurabiagiottiparfums.com/privacy-policy-2">regolamento</a> e dichiaro di aver letto e compreso l&lsquo;<a target="_blank" href="https://laurabiagiottiparfums.com/privacy-policy-2">informativa privacy</a> resa da Angelini Beauty S.p.A.</span>
           </div>
           <div className="form__row checkbox">
             <input

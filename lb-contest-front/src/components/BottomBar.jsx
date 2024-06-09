@@ -200,7 +200,6 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
             visibleIngredients.fill(true, 6, 9)
           )
         } else if (vw == 768 || vw > 768) {
-          console.log(true)
           setVisibleIngredients(
             visibleIngredients.fill(false, 0, 9)
           )
@@ -436,7 +435,6 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
             width: element.node.getBoundingClientRect().width,
             height: element.node.getBoundingClientRect().height
           };
-          console.log(bottleRect)
   
           if (
             (droppedElementRect.left + (droppedElementRect.width / 2)) >= bottleRect.left &&

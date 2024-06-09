@@ -32,9 +32,7 @@ function WinPage() {
   const fetchPrize = async (url) => {
     try {
       const response = await axios.get(url);
-
       if (response.status === 200) {
-        console.log(`Premio asignado: ${response.data.prize}`, response.data);
 
         switch (response.data.prize) {
           case "prize2":
@@ -76,47 +74,12 @@ function WinPage() {
   useEffect(() => {
     fetchPrize(`https://lbcontest.it/admin-access/api/winners/${uniqueId}`);
 
-    /*
-
-
-    const result = Math.floor(Math.random() * 3) + 1;
-
-    switch (result) {
-      case 1:
-        setVersion({
-          cssClass: "version-1",
-          bgd: Bgd,
-          text: "Congratulazioni! Per te una fragranza Aqve Romane a sorpresa.",
-          text2: "Controlla la tua email per riscattare il premio.",
-          img: Geles,
-        });
-        break;
-      case 2:
-        setVersion({
-          cssClass: "version-1",
-          bgd: Bgd,
-          text: "Congratulazioni! Hai vinto uno shower gel Aqve Romane in taglia da viaggio.",
-          text2: "Controlla la tua email per riscattare il premio.",
-          img: Perfumes,
-        });
-        break;
-      case 3:
-        setVersion({
-          cssClass: "version-2",
-          bgd: Bgd2,
-          text: "Congratulazioni! Per te un soggiorno di una notte con percorso benessere per due persone presso una struttura QC Terme.",
-          text2: "Potrai scegliere tra le seguenti destinazioni: QC Termegarda, QC Termeroma, QC Termemontebianco, QC Terme Bagni Vecchi e Bagni Nuovi, entrambi a Bormio. Controlla la tua email per riscattare il premio.",
-        });
-        break;
-    }
-    */
-
     setTimeout(()=>{
       document.querySelector('.win-page').style.opacity = 1;
       document.querySelector('.win-page__card').style.opacity = 1;
       document.querySelector('.button').style.opacity = 1;
     }, 100)
-  }, [])
+  }, [uniqueId])
 
   const handlePlayClick = () => {
     document.querySelector('.win-page').style.opacity = 0;
