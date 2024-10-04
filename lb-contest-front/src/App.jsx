@@ -10,7 +10,6 @@ import './assets/scss/utils/fonts.scss';
 import StartPage from './components/StartPage';
 import { UniqueIdProvider } from './contexts/UniqueIdContext';
 import { GameStatusProvider } from './contexts/GameStatusContext';
-import GTMConversion from './gtm';
 
 function App() {
   return (
@@ -18,7 +17,7 @@ function App() {
       <GameStatusProvider>
         <UniqueIdProvider>
           <Router>
-            <GTMConversion />
+            {/* <GTMConversion /> */}
             <Routes>
               <Route path="/" element={<StartPage/>} />
               <Route exact path="/play" element={<MainBackground/>} />

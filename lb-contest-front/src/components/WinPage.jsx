@@ -39,8 +39,8 @@ function WinPage() {
             setVersion({
               cssClass: "version-1",
               bgd: Bgd,
-              text: "Hai vinto uno dei profumi di Aqve Romane",
-              text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+              text: "Congratulazioni! Per te una fragranza Aqve Romane a sorpresa.",
+              text2: "Controlla la tua email per riscattare il premio.",
               img: Geles,
             });
             break;
@@ -48,8 +48,8 @@ function WinPage() {
             setVersion({
               cssClass: "version-1",
               bgd: Bgd,
-              text: "Hai Vinto una body lotion di Aqve Romane",
-              text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+              text: "Congratulazioni! Hai vinto uno shower gel Aqve Romane in taglia da viaggio.",
+              text2: "Controlla la tua email per riscattare il premio.",
               img: Perfumes,
             });
             break;
@@ -57,8 +57,8 @@ function WinPage() {
             setVersion({
               cssClass: "version-2",
               bgd: Bgd2,
-              text: "Hai vinto un weekend alle acque termali di Roma",
-              text2: "Congratulazioni hai vinto! Entra nel mondo di Aqve Romane con uno dei nostri premi, controlla la mail per riscattare il tuo premio.",
+              text: "Congratulazioni! Per te un soggiorno di una notte con percorso benessere per due persone presso una struttura QC Terme.",
+              text2: "Potrai scegliere tra le seguenti destinazioni: QC Termegarda, QC Termeroma, QC Termemontebianco, QC Terme Bagni Vecchi e Bagni Nuovi, entrambi a Bormio. Controlla la tua email per riscattare il premio.",
             });
             break;
         }
@@ -72,7 +72,7 @@ function WinPage() {
 
 
   useEffect(() => {
-    fetchPrize(`http://localhost:3000/api/winners/${uniqueId}`);
+    fetchPrize(`http://lbcontest.it/api/winners/${uniqueId}`);
 
     setTimeout(()=>{
       document.querySelector('.win-page').style.opacity = 1;

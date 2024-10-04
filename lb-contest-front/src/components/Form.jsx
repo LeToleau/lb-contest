@@ -9,6 +9,8 @@ import dataProvinces from '../../gi_province.json';
 import { useUniqueId } from '../contexts/UniqueIdContext';
 import { useGameStatus } from '../contexts/GameStatusContext';
 import ShortUniqueId from 'short-unique-id';
+import validator from 'validator';
+
 
 function Form() {
   const [validationMsg, setValidationMsg] = useState('');
@@ -81,6 +83,18 @@ function Form() {
 
     let validations = !isValidated;
 
+    // Función para validar el número de teléfono
+    function validatePhoneNumber(phone) {
+      const hasLetters = /[a-zA-Z]/.test(phone);
+      const hasSpecial = /[^\d+\s-()<>"']/g.test(phone);
+
+      if (!hasLetters && !hasSpecial && validator.isMobilePhone(phone, 'any', { strictMode: false })) {
+        return validator.isMobilePhone(phone, 'any', { strictMode: false });
+      } else {
+        return false;
+      }
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const validMail = emailRegex.test(formData.mail);
 
@@ -89,15 +103,16 @@ function Form() {
 
     const taxCodeRegex = /^[A-Z]{3}[A-Z]{3}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
     const validTaxCode = taxCodeRegex.test(formData.taxCode);
+    const validPhone = validatePhoneNumber(formData.phone);
 
     const conditions = {
-    valid: validations && formData.termsConditions && formData.commercial && validMail && validPostalCode && validTaxCode,
+    valid: validations && formData.termsConditions && validMail && validPostalCode && validTaxCode && validPhone,
     incompleteForm: !validations,
     invalidEmail: /*validations && formData.termsConditions && */ !validMail /*&& validPostalCode && validTaxCode*/,
     invalidTaxCode: /*validations && formData.termsConditions && validMail && validPostalCode &&*/ !validTaxCode,
     invalidPostalCode: /*validations && formData.termsConditions && validMail &&*/ !validPostalCode /*&& validTaxCode*/,
     termsNotAccepted: /*validations &&*/ !formData.termsConditions /*&& validMail && validPostalCode && validTaxCode*/,
-    commercialNotAccepted: /*validations &&*/ !formData.commercial /*&& validMail && validPostalCode && validTaxCode*/,
+    invalidPhone: !validPhone
     };
 
     const validationMessages = {
@@ -107,7 +122,7 @@ function Form() {
     invalidTaxCode: `*Il formato del codice fiscale non è corretto, inseriscilo correttamente`,
     invalidPostalCode: `*Il formato del CAP non è corretto, deve contenere esattamente 5 cifre`,
     termsNotAccepted: `*Per continuare è necessario accettare i Termini e Condizioni`,
-    commercialNotAccepted: `*Per proseguire è necessario accettare il consenso`,
+    invalidPhone: `*Il telefono non è valido.`,
     };
 
    const conditionKey = Object.keys(conditions).find(key => conditions[key]);
@@ -127,11 +142,10 @@ function Form() {
       setIsLoading(true);
       
       try {
-        const response = await axios.post('http://localhost:3000/api/participants', updatedFormData);
+        const response = await axios.post('http://lbcontest.it/api/participants', updatedFormData);
         setIsLoading(false);
 
         if (response.status === 201) {
-          console.log('Participante agregado con éxito');
           // Reiniciar el estado del formulario después de enviar los datos
 
           if (!response.data.registered) {
@@ -159,7 +173,7 @@ function Form() {
               }
             }, 500);
           } else {
-            setValidationMsg('Participant Already Registered');
+            setValidationMsg('Hai già partecipato');
           }
         } else {
           console.error('Error al agregar participante', response.data);
@@ -390,7 +404,7 @@ function Form() {
               type="checkbox"
               onChange={handleCheckbox}
             />
-            <span>Iscrivendomi, accetto il <a target="_blank" href="https://laurabiagiottiparfums.com/privacy-policy-2">regolamento</a> e dichiaro di aver letto e compreso l&lsquo;<a target="_blank" href="https://laurabiagiottiparfums.com/privacy-policy-2">informativa privacy</a> resa da Angelini Beauty S.p.A.</span>
+            <span>Iscrivendomi, accetto il <a target="_blank" href="https://www.laurabiagiottiparfums.com/wp-content/uploads/2024/06/REGOLAMENTO_ACQUE_ROMANE.pdf">regolamento</a> e dichiaro di aver letto e compreso l&lsquo;<a target="_blank" href="https://www.laurabiagiottiparfums.com/privacy-policy-contest/">informativa privacy</a> resa da Angelini Beauty S.p.A.</span>
           </div>
           <div className="form__row checkbox">
             <input

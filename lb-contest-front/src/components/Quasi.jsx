@@ -36,8 +36,7 @@ function Quasi() {
       <div className="quasi__overlay"></div>
       <div className="quasi__card">
         <div className="quasi__text-wrapper">
-          <h1>C&rsquo;ERI QUASI!</h1>
-          <h2>Non hai vinto</h2>
+          <h1>NON HAI VINTO</h1>
           <p>Riceverai notizie sulle future iniziative di Laura Biagiotti Parfums</p>
           <span>Se vuoi contattarci puoi scrivere a <a href="mailto:info@laurabiagiottiparfums.com">info@laurabiagiottiparfums.com</a></span>
         </div>
