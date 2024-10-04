@@ -1,2 +1,107 @@
-<h1>{{title}}</h1>
-<p>Check Form's Data and Contest Winners</p>
+<div class="index-page">
+
+    <div class="index-page__heading">
+        <div class="index-page__title">
+            <h1>{{title}}</h1>
+            <p>Controlla i dati del modulo e i vincitori del concorso</p>
+        </div>
+        <div class="index-page__logout">
+            <a href="/admin/logout">
+                <button>Sessione Chiusa</button>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="index-page__statistics">
+        <h4>Data odierna: <span>{{date}}</span></h4>
+        <div class="index-page__init-data">
+            <p>Data di inizio del concorso: <span>{{initDate.date}}</span></p>
+            <p>Data di fine del concorso: <span>2024-07-01</span></p>
+        </div>
+        <div class="index-page__prize-data">
+            <div class="index-page__delivered">
+                <p>Viaggi a Acque Termali consegnati: <span>{{deliveredFirstPrize}}</span></p>
+                <p>Profumi Erogati: <span>{{deliveredSecondPrize}}</span></p>
+                <p>Shower Gel consegnati: <span>{{deliveredThirdPrize}}</span></p>
+            </div>
+
+            <br>
+
+            <div class="index-page__remaining">
+                <p>Totale premi rimanenti: <span>{{remainingPrizes}}</span></p>
+                <p>Viaggi rimanenti alle sorgenti termali: <span>{{remainingFirstPrize}}</span></p>
+                <p>Profumi rimanenti: <span>{{remainingSecondPrize}}</span></p>
+                <p>Shower Gel rimanenti: <span>{{remainingThirdPrize}}</span></p>
+            </div>
+        </div>
+        <div class="index-page__last-prize-date">
+            <p>Ultimo Premio assegnato: <span>{{lastPrize}}</span> | Data: <span>{{lastPrizeInfo.date}}</span> | Ora: <span>{{lastPrizeInfo.time}}</span></p>
+        </div>
+    </div>
+    <br>
+
+    <hr>
+
+    <h2>Partecipanti</h2>
+    {{#if participants.length}}
+        <div class="buttons">
+            <button onclick="window.location.href='/exportP/csv'">Scarica CSV</button>
+            <button onclick="window.location.href='/exportP/xml'">Scarica XML</button>
+        </div>
+        <table border="1">
+        <thead>
+            <tr>
+            {{#with (lookup participants 0) as |firstParticipant|}}
+                {{#each (getKeys firstParticipant)}}
+                <th>{{this}}</th>
+                {{/each}}
+            {{/with}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each participants}}
+            <tr>
+                {{#each (getKeys this)}}
+                <td>{{lookup ../this this}}</td>
+                {{/each}}
+            </tr>
+            {{/each}}
+        </tbody>
+        </table>
+    {{else}}
+        <p class="no-table">Nessun partecipante trovato.</p>
+    {{/if}}
+
+    <hr>
+
+    <h2>Vincitori</h2>
+    {{#if winners.length}}
+        <div class="buttons">
+            <button onclick="window.location.href='/exportW/csv'">Scarica CSV</button>
+            <button onclick="window.location.href='/exportW/xml'">Scarica XML</button>
+        </div>
+        <table border="1">
+        <thead>
+            <tr>
+            {{#with (lookup winners 0) as |firstWinner|}}
+                {{#each (getKeys firstWinner)}}
+                <th>{{this}}</th>
+                {{/each}}
+            {{/with}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each winners}}
+            <tr>
+                {{#each (getKeys this)}}
+                <td>{{lookup ../this this}}</td>
+                {{/each}}
+            </tr>
+            {{/each}}
+        </tbody>
+        </table>
+    {{else}}
+        <p class="no-table">Nessun vincitore trovato.</p>
+    {{/if}}
+</div>

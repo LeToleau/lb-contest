@@ -36,6 +36,22 @@
         height: auto;
         padding: 6.25vh 30px;
     }
+
+    .loader {
+        border: 16px solid #d4d4d4;
+        border-radius: 50%;
+        border-top: 16px solid #8c8c8c;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        position: fixed;
+        transform: translate(-50%, -50%);
+    }
+        
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
     
     &__form {
         display: flex;
@@ -47,6 +63,7 @@
         backdrop-filter: blur(10px);
         padding: 12px;
         border-radius: 5px;
+        max-width: 686px;
 
         opacity: 0;
         transition: .5s .3s;
@@ -54,12 +71,22 @@
     
     &__wrapper {
         border: 1.5px solid #000000;
-        padding: 22px 95px 42px;
+        padding: 24px 40px 20px;
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+
+        &>span {
+            font-family: Montserrat, sans-serif;
+            font-size: 12px;
+            margin-top: 32px;
+
+            a {
+                color: #000000;
+            }
+        }
 
         @media (max-width: 1080px) {
             padding: 32px 30px 32px;
@@ -227,12 +254,14 @@
             
             input {
                 width: auto;
+                cursor: pointer;
             }
             
             span {
                 font-family: Montserrat, sans-serif;
                 font-size: 12px;
                 line-height: 16px;
+                text-align: left;
                 
                 @media (max-width: 768px) {
                     font-size: 11px;
@@ -250,6 +279,11 @@
             }
         }
 
+        &.validation-msg {
+            margin-bottom: 0;
+        }
+
+
         &.submit-button {
             margin-top: 24px;
             display: flex;
@@ -259,6 +293,10 @@
                 padding: 0;
                 box-shadow: none;
                 background-color: transparent;
+
+                &.disabled {
+                    pointer-events: none;
+                }
 
                 span {
                     font-size: 32px;

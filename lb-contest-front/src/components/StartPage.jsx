@@ -43,8 +43,6 @@ function StartPage() {
         setSlides({ slidesPerView: 1, initialSlide: 2, pagination: true, spaceBetween: 0 })
       }
 
-      console.log(`H: ${window.innerHeight}`, `W: ${window.innerWidth}`)
-
       setTimeout(()=>{
         document.querySelector('.start-page__logo').style.transform = `translate(0px, 0px)`;
         document.querySelector('.button').style.transform = `translate(0px, 0px)`;
@@ -54,6 +52,7 @@ function StartPage() {
       }, 100)
     }, [])
 
+    
     const handlePlayClick = () => {
       document.querySelector('.start-page__logo').style.opacity = 0;
       document.querySelector('.start-page').style.opacity = 0;
@@ -86,9 +85,9 @@ function StartPage() {
                 )}
               </Swiper>
             </div>
-            <div className="start-page__text">{'Partecipa e scopri subito se hai vinto. Questi sono i fantastici premi in palio: una delle nuove Eau de Toilette Aqve Romane, un gel doccia della stessa collezione o un ingresso con una notte da sogno in una SPA QC Terme!'}</div>
+            <div className="start-page__text">{'IL CONCORSO E’ TERMINATO. QUESTI SONO I FANTASTICI PREMI MESSI IN PALIO: UNA DELLE NUOVE  EAU DE TOILETTE AQVE ROMANE, UN GEL DOCCIA DELLA STESSA COLLEZIONE O UN INGRESSO CON UNA NOTTE DA SOGNO IN UNA SPA QC TERME!'}</div>
         </div>
-        </div>
+      </div>
       <div className="button">
         <PlayBtn text={'PARTECIPA'} onClick={handlePlayClick} />
       </div>

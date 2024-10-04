@@ -22,6 +22,7 @@ import Tick from '../assets/img/tick.svg';
 import Cross from '../assets/img/cross.svg';
 
 import '../assets/scss/components/BottomBar.scss';
+import { useGameStatus } from '../contexts/GameStatusContext';
 
 function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
     // ref to avoid warning
@@ -39,6 +40,8 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
 
     // items for transition
     const [ingredients, setIngredients] = useState([]);
+
+    const { setGameStatus } = useGameStatus();
 
     // navigation tool
     const history = useNavigate();
@@ -197,7 +200,6 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
             visibleIngredients.fill(true, 6, 9)
           )
         } else if (vw == 768 || vw > 768) {
-          console.log(true)
           setVisibleIngredients(
             visibleIngredients.fill(false, 0, 9)
           )
@@ -255,10 +257,11 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
 
             setTimeout(() => {
               if (score >= 6) {
-                history('/contest-form');
+                setGameStatus(true)
               } else {
-                history('/form');
+                setGameStatus(false)
               }
+              history('/contest-form');
             },1200);
         }
     }, [allDraggableDisabled, history]);
@@ -432,7 +435,6 @@ function BottomBar({onDropAndUpdateScore, bottles, scoreBoard}) {
             width: element.node.getBoundingClientRect().width,
             height: element.node.getBoundingClientRect().height
           };
-          console.log(bottleRect)
   
           if (
             (droppedElementRect.left + (droppedElementRect.width / 2)) >= bottleRect.left &&

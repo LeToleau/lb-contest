@@ -6,9 +6,16 @@ import axios from 'axios';
 import '../assets/scss/components/Form.scss';
 import dataCities from '../../gi_comuni.json';
 import dataProvinces from '../../gi_province.json';
+import { useUniqueId } from '../contexts/UniqueIdContext';
+import { useGameStatus } from '../contexts/GameStatusContext';
+import ShortUniqueId from 'short-unique-id';
+import validator from 'validator';
+
 
 function Form() {
   const [validationMsg, setValidationMsg] = useState('');
+  const { gameStatus } = useGameStatus();
+
   const [formData, setFormData] = useState({
     name: '',
     lastname: '',
@@ -20,8 +27,12 @@ function Form() {
     province: '',
     address: '',
     termsConditions: false,
-    // timestamp: '',
+    commercial: false,
+    uniqueId: '',
+    wonGame: gameStatus,
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [cities, setCities] = useState([]);
   const [provinces, setProvinces] = useState([]);
@@ -30,13 +41,13 @@ function Form() {
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [showProvinceDropdown, setShowProvinceDropdown] = useState(false);
 
+  const { setUniqueId } = useUniqueId();
+
   const navigate = useNavigate();
 
   function getCities() {
     const listCities = [];
-    // console.log(allCities);
     dataCities.forEach(city => {
-      // console.log(city)
       listCities.push(city.denominazione_ita);
     });
     setCities(listCities);
@@ -45,24 +56,44 @@ function Form() {
   function getProvinces() {
     const listProvinces = [];
     dataProvinces.forEach(province => {
-      //console.log(province)
       listProvinces.push(province.denominazione_provincia);
     });
     setProvinces(listProvinces);
   }
+
+  useEffect(() => {
+    if (isLoading) {
+      document.querySelector('.form__row .play-button').classList.add('disabled');
+    } else {
+      document.querySelector('.form__row .play-button').classList.remove('disabled');
+    }
+  }, [isLoading]);
   
-  /*async*/ function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    /*
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      timestamp: new Date().toISOString(),
-    }));
-    */
+    const isValidated = Object.entries(formData).some(([key, value]) => {
+      // Excluir la propiedad 'uniqueId' del proceso de validación
+      if (key === 'uniqueId') {
+        return false;
+      }
+      // Realizar la validación para otras propiedades que no sean 'uniqueId'
+      return value === '';
+    });
 
-    const isValidated = Object.values(formData).some(value => value === '');
     let validations = !isValidated;
+
+    // Función para validar el número de teléfono
+    function validatePhoneNumber(phone) {
+      const hasLetters = /[a-zA-Z]/.test(phone);
+      const hasSpecial = /[^\d+\s-()<>"']/g.test(phone);
+
+      if (!hasLetters && !hasSpecial && validator.isMobilePhone(phone, 'any', { strictMode: false })) {
+        return validator.isMobilePhone(phone, 'any', { strictMode: false });
+      } else {
+        return false;
+      }
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const validMail = emailRegex.test(formData.mail);
@@ -72,14 +103,16 @@ function Form() {
 
     const taxCodeRegex = /^[A-Z]{3}[A-Z]{3}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
     const validTaxCode = taxCodeRegex.test(formData.taxCode);
+    const validPhone = validatePhoneNumber(formData.phone);
 
     const conditions = {
-    valid: validations && formData.termsConditions && validMail && validPostalCode && validTaxCode,
+    valid: validations && formData.termsConditions && validMail && validPostalCode && validTaxCode && validPhone,
     incompleteForm: !validations,
     invalidEmail: /*validations && formData.termsConditions && */ !validMail /*&& validPostalCode && validTaxCode*/,
     invalidTaxCode: /*validations && formData.termsConditions && validMail && validPostalCode &&*/ !validTaxCode,
     invalidPostalCode: /*validations && formData.termsConditions && validMail &&*/ !validPostalCode /*&& validTaxCode*/,
     termsNotAccepted: /*validations &&*/ !formData.termsConditions /*&& validMail && validPostalCode && validTaxCode*/,
+    invalidPhone: !validPhone
     };
 
     const validationMessages = {
@@ -89,22 +122,30 @@ function Form() {
     invalidTaxCode: `*Il formato del codice fiscale non è corretto, inseriscilo correttamente`,
     invalidPostalCode: `*Il formato del CAP non è corretto, deve contenere esattamente 5 cifre`,
     termsNotAccepted: `*Per continuare è necessario accettare i Termini e Condizioni`,
+    invalidPhone: `*Il telefono non è valido.`,
     };
 
    const conditionKey = Object.keys(conditions).find(key => conditions[key]);
     
-    if (conditionKey === 'valid') {
+   if (conditionKey === 'valid') {
+      const id = new ShortUniqueId({ length: 16 });
+      const rndId = id.rnd();
+      setUniqueId(rndId);
+
+      const updatedFormData = {
+        ...formData,
+        uniqueId: rndId
+      };
+
       setValidationMsg(validationMessages.valid);
 
-      setTimeout(() => {
-        navigate('/win-page');
-      }, 300);
-
-      /*
+      setIsLoading(true);
+      
       try {
-        const response = await axios.post('http://localhost:3000/api/participants', formData);
+        const response = await axios.post('http://lbcontest.it/api/participants', updatedFormData);
+        setIsLoading(false);
+
         if (response.status === 201) {
-          console.log('Participante agregado con éxito:', response.data);
           // Reiniciar el estado del formulario después de enviar los datos
 
           if (!response.data.registered) {
@@ -119,6 +160,9 @@ function Form() {
               province: '',
               address: '',
               termsConditions: false,
+              commercial: false,
+              uniqueId: '',
+              wonGame: gameStatus
             });
 
             setTimeout(() => {
@@ -127,17 +171,17 @@ function Form() {
               } else {
                 navigate('/quasi');
               }
-            }, 200);
+            }, 500);
           } else {
-            setValidationMsg('Participant Already Registered');
+            setValidationMsg('Hai già partecipato');
           }
         } else {
           console.error('Error al agregar participante', response.data);
         }
       } catch (error) {
+        setIsLoading(false);
         console.error('Error al enviar la solicitud', error);
       }
-      */
     }  else {
       setValidationMsg(validationMessages[conditionKey]);
     }
@@ -148,6 +192,15 @@ function Form() {
       {
         ...formData,
         termsConditions: !formData.termsConditions
+      }
+    );
+  }
+
+  function handleCheckbox2() {
+    setFormData(
+      {
+        ...formData,
+        commercial: !formData.commercial
       }
     );
   }
@@ -218,7 +271,6 @@ function Form() {
   };
 
   useEffect(() => {
-    //fetchCities();
     getCities();
     getProvinces();
     setTimeout(()=>{
@@ -230,7 +282,7 @@ function Form() {
     <div className="form" style={estiloDelDiv} onClick={handleFormClick}>
       <form className="form__form" onSubmit={handleSubmit}>
         <div className="form__wrapper">
-          <h1>ULTIMO PASSO: <br/>COMPILA E SCOPRI SUBITO SE HAI VINTO!</h1>
+          <h1>ULTIMO PASSO: COMPILA E SCOPRI SUBITO SE HAI VINTO!</h1>
           <div className="form__row">
             <input
               id="name"
@@ -352,15 +404,26 @@ function Form() {
               type="checkbox"
               onChange={handleCheckbox}
             />
-            <span>Iscrivendomi, accetto il <a target="_blank" href="https://lb.figmenta.digital/wp-content/uploads/2024/06/REGOLAMENTO_ACQUE_ROMANE_def.pdf">Regolamento</a> e la <a target="_blank" href="https://lb.figmenta.digital/privacy-policy-2/">Privacy Policy</a> di Laura Biagiotti Parfums.</span>
+            <span>Iscrivendomi, accetto il <a target="_blank" href="https://www.laurabiagiottiparfums.com/wp-content/uploads/2024/06/REGOLAMENTO_ACQUE_ROMANE.pdf">regolamento</a> e dichiaro di aver letto e compreso l&lsquo;<a target="_blank" href="https://www.laurabiagiottiparfums.com/privacy-policy-contest/">informativa privacy</a> resa da Angelini Beauty S.p.A.</span>
           </div>
           <div className="form__row checkbox">
-            <span style={{color: 'red', fontSize: '14px'}}>{validationMsg}</span>
+            <input
+              id="commercial"
+              name="commercial"
+              type="checkbox"
+              onChange={handleCheckbox2}
+            />
+            <span>Acconsento alla ricezione di comunicazioni commerciali su novità relative a prodotti, promozioni e iniziative di Angelini Beauty S.p.A., delle proprie affiliate e distributori.</span>
+          </div>
+          <div className="form__row validation-msg">
+            <span style={{color: 'red', fontSize: '14px', marginBottom: 0}}>{validationMsg}</span>
           </div>
           <div className="form__row submit-button">
             <PlayBtn text={'Invia'} onClick={handleSubmit} />
           </div>
+          <span>Se vuoi contattarci puoi scrivere a <a href="mailto:info@laurabiagiottiparfums.com">info@laurabiagiottiparfums.com</a></span>
         </div>
+        {isLoading && <div className="loader"></div>}
       </form>
     </div>
   );
